@@ -22,6 +22,7 @@ AI 时代的第一性原理计算机科学课程体系。
 - [WHY - 为什么做这个项目](./guide/WHY.md)
 - [ROADMAP - 12 个月路线图](./guide/ROADMAP.md)
 - [PROJECTS - 核心系统仓库清单](./guide/PROJECTS.md)
+- [PROGRESS - 项目进度记录](./guide/PROGRESS.md) 📊
 - [原则文档](./principles/) - 四大原则的详细说明
 - [课程体系](./courses/) - 六大模块的学习路径
 
