@@ -11,3 +11,13 @@
 *.swp
 *.swo
 *~
+
+# Ignore project directories (they have their own repositories)
+tiny-interpreter/
+simple-compiler/
+mini-os/
+simple-fs/
+storage-engine/
+tx-manager/
+consensus/
+dist-kv/

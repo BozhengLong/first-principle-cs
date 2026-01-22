@@ -7,7 +7,7 @@
 | 仓库名 | 状态 | 一句话目标 | 入口命令 | 关键不变量 | 关联课程模块 |
 |--------|------|-----------|---------|-----------|-------------|
 | tiny-interpreter | active | 最小解释器，理解求值与作用域 | `python -m src.tiny_interpreter.main examples/factorial.lisp` | 词法作用域、闭包捕获 | Module B |
-| simple-compiler | planned | 简单编译器，理解代码生成 | `./compile source.lang` | 类型安全、内存安全 | Module B |
+| simple-compiler | active | 简单编译器，理解代码生成 | `python -m src.simple_compiler.main examples/gcd.sl` | 类型安全、内存安全 | Module B |
 | mini-os | planned | 最小操作系统内核，理解进程与内存 | `qemu -kernel kernel.bin` | 进程隔离、内存保护 | Module C |
 | simple-fs | planned | 简单文件系统，理解持久化与一致性 | `./mkfs disk.img` | 崩溃一致性、原子性 | Module C |
 | storage-engine | planned | 存储引擎，理解索引与持久化 | `./storage-bench` | 持久化、有序性 | Module D |
@@ -50,21 +50,37 @@ python3 -m src.tiny_interpreter.main examples/factorial.lisp
 
 ### simple-compiler
 
-**目标**：实现一个简单的编译器，将高级语言编译到字节码或汇编。
+**状态**：✅ Active - [GitHub 仓库](https://github.com/first-principles-cs/simple-compiler)
+
+**目标**：实现一个简单的编译器，将SimpleLang（类C语言）编译到栈式字节码并在虚拟机上执行。
 
 **核心特性**：
-- 类型检查
-- 寄存器分配
-- 代码生成
+- 词法分析与语法分析
+- 静态类型检查
+- 三地址码中间表示
+- 栈式字节码生成
+- 虚拟机执行
 
 **关键不变量**：
-- 类型安全：编译后的代码不会出现类型错误
-- 内存安全：不会出现悬空指针或越界访问
+- 类型安全：类型正确的程序不会在运行时产生类型错误
+- 内存安全：基于栈的执行防止内存错误
+- 语义保持：编译后的程序与源语义行为一致
 
 **验证方法**：
-- 单元测试：覆盖所有编译阶段
-- Fuzz 测试：生成随机程序测试编译器
-- 基准测试：对比不同优化策略的效果
+- 单元测试：75个测试覆盖所有编译阶段
+  - Lexer: 15个测试
+  - Parser: 19个测试
+  - Type Checker: 26个测试
+  - 集成测试: 15个测试
+- 示例程序：6个SimpleLang程序验证功能
+- 代码统计：~1982行源代码，~882行测试代码
+
+**快速开始**：
+```bash
+git clone https://github.com/first-principles-cs/simple-compiler.git
+cd simple-compiler
+python -m src.simple_compiler.main examples/gcd.sl
+```
 
 **关联课程**：Module B - 语言与执行
 

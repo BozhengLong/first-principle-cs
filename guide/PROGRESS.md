@@ -133,7 +133,7 @@ first-principles-cs 是一个基于第一性原理重建计算机科学基础设
 | 项目规划 | ✅ 完成 | 2026-01-22 |
 | Guide 仓库 | ✅ 完成 | 2026-01-22 |
 | Q1 项目 1: tiny-interpreter | ✅ 完成 | 2026-01-22 |
-| Q1 项目 2: simple-compiler | 🔄 进行中 | - |
+| Q1 项目 2: simple-compiler | ✅ 完成 | 2026-01-22 |
 
 ### 仓库状态
 
@@ -141,7 +141,7 @@ first-principles-cs 是一个基于第一性原理重建计算机科学基础设
 |--------|------|------------|--------|---------|--------|
 | guide | ✅ Active | [链接](https://github.com/first-principles-cs/guide) | 22 | 3500+ | - |
 | tiny-interpreter | ✅ Active | [链接](https://github.com/first-principles-cs/tiny-interpreter) | 21 | 1700+ | 43 |
-| simple-compiler | 📋 Planned | - | - | - | - |
+| simple-compiler | ✅ Active | [链接](https://github.com/first-principles-cs/simple-compiler) | 32 | 1982 | 75 |
 | mini-os | 📋 Planned | - | - | - | - |
 | simple-fs | 📋 Planned | - | - | - | - |
 | storage-engine | 📋 Planned | - | - | - | - |
