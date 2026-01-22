@@ -6,7 +6,7 @@
 
 | 仓库名 | 状态 | 一句话目标 | 入口命令 | 关键不变量 | 关联课程模块 |
 |--------|------|-----------|---------|-----------|-------------|
-| tiny-interpreter | planned | 最小解释器，理解求值与作用域 | `./interp program.lisp` | 词法作用域、尾调用优化 | Module B |
+| tiny-interpreter | active | 最小解释器，理解求值与作用域 | `python -m src.tiny_interpreter.main examples/factorial.lisp` | 词法作用域、闭包捕获 | Module B |
 | simple-compiler | planned | 简单编译器，理解代码生成 | `./compile source.lang` | 类型安全、内存安全 | Module B |
 | mini-os | planned | 最小操作系统内核，理解进程与内存 | `qemu -kernel kernel.bin` | 进程隔离、内存保护 | Module C |
 | simple-fs | planned | 简单文件系统，理解持久化与一致性 | `./mkfs disk.img` | 崩溃一致性、原子性 | Module C |
@@ -19,21 +19,30 @@
 
 ### tiny-interpreter
 
+**状态**：✅ Active - [GitHub 仓库](https://github.com/first-principles-cs/tiny-interpreter)
+
 **目标**：实现一个最小的 Lisp 风格解释器，理解程序如何被求值。
 
 **核心特性**：
 - 词法分析与语法分析
 - 环境模型与闭包
-- 递归与尾调用优化
+- 递归支持
 
 **关键不变量**：
 - 词法作用域：变量查找遵循静态作用域规则
-- 尾调用优化：尾递归不消耗栈空间
+- 闭包捕获：闭包捕获定义时的环境
 
 **验证方法**：
-- 单元测试：覆盖所有语言特性
-- 属性测试：验证作用域规则
-- 基准测试：对比尾调用优化前后的性能
+- 单元测试：43 个测试全部通过
+- 集成测试：factorial（递归）、closure（闭包）示例
+- 代码覆盖率：核心组件 100% 覆盖
+
+**快速开始**：
+```bash
+git clone https://github.com/first-principles-cs/tiny-interpreter.git
+cd tiny-interpreter
+python3 -m src.tiny_interpreter.main examples/factorial.lisp
+```
 
 **关联课程**：Module B - 语言与执行
 
