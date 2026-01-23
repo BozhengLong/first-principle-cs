@@ -8,7 +8,7 @@
 |--------|------|-----------|---------|-----------|-------------|
 | tiny-interpreter | active | 最小解释器，理解求值与作用域 | `python -m src.tiny_interpreter.main examples/factorial.lisp` | 词法作用域、闭包捕获 | Module B |
 | simple-compiler | active | 简单编译器，理解代码生成 | `python -m src.simple_compiler.main examples/gcd.sl` | 类型安全、内存安全 | Module B |
-| mini-os | planned | 最小操作系统内核，理解进程与内存 | `qemu -kernel kernel.bin` | 进程隔离、内存保护 | Module C |
+| mini-os | active | 最小操作系统内核，理解进程与内存 | `make qemu` | 进程隔离、内存保护 | Module C |
 | simple-fs | planned | 简单文件系统，理解持久化与一致性 | `./mkfs disk.img` | 崩溃一致性、原子性 | Module C |
 | storage-engine | planned | 存储引擎，理解索引与持久化 | `./storage-bench` | 持久化、有序性 | Module D |
 | tx-manager | planned | 事务管理器，理解并发控制 | `./tx-test` | ACID 性质 | Module D |
@@ -88,21 +88,35 @@ python -m src.simple_compiler.main examples/gcd.sl
 
 ### mini-os
 
+**状态**：✅ Active - [GitHub 仓库](https://github.com/first-principles-cs/mini-os)
+
 **目标**：实现一个最小的操作系统内核，理解进程、内存、系统调用。
 
 **核心特性**：
-- 进程调度
-- 虚拟内存
-- 系统调用接口
+- 进程调度 (round-robin)
+- 虚拟内存 (two-level page tables)
+- 系统调用接口 (fork, exit, wait, etc.)
+- 上下文切换
+- 中断处理
 
 **关键不变量**：
 - 进程隔离：进程不能访问其他进程的内存
 - 内存保护：用户态不能访问内核态内存
+- 调度公平性：所有就绪进程最终会被调度
 
 **验证方法**：
-- 单元测试：测试调度算法
+- 单元测试：35个文件，~2000行代码
+- 调度器测试：验证公平性和状态转换
+- 内存测试：验证隔离和保护
 - 故障注入：测试进程崩溃场景
-- 基准测试：测量上下文切换开销
+
+**快速开始**：
+```bash
+git clone https://github.com/first-principles-cs/mini-os.git
+cd mini-os
+make
+make qemu
+```
 
 **关联课程**：Module C - 单机系统
 
