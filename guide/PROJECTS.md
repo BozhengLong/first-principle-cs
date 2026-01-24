@@ -9,7 +9,7 @@
 | tiny-interpreter | active | 最小解释器，理解求值与作用域 | `python -m src.tiny_interpreter.main examples/factorial.lisp` | 词法作用域、闭包捕获 | Module B |
 | simple-compiler | active | 简单编译器，理解代码生成 | `python -m src.simple_compiler.main examples/gcd.sl` | 类型安全、内存安全 | Module B |
 | mini-os | active | 最小操作系统内核，理解进程与内存 | `make qemu` | 进程隔离、内存保护 | Module C |
-| simple-fs | planned | 简单文件系统，理解持久化与一致性 | `./mkfs disk.img` | 崩溃一致性、原子性 | Module C |
+| simple-fs | active | 简单文件系统，理解持久化与一致性 | `./mkfs disk.img` | 崩溃一致性、原子性 | Module C |
 | storage-engine | planned | 存储引擎，理解索引与持久化 | `./storage-bench` | 持久化、有序性 | Module D |
 | tx-manager | planned | 事务管理器，理解并发控制 | `./tx-test` | ACID 性质 | Module D |
 | consensus | planned | 共识协议，理解分布式一致性 | `./raft-node` | 安全性、活性 | Module E |
@@ -124,21 +124,40 @@ make qemu
 
 ### simple-fs
 
-**目标**：实现一个简单的文件系统，理解持久化与崩溃一致性。
+**状态**：✅ Active - [GitHub 仓库](https://github.com/first-principles-cs/simple-fs)
+
+**目标**：实现一个简单的 Unix-like 文件系统，基于 xv6 设计，理解持久化与崩溃一致性。
 
 **核心特性**：
-- Inode 与目录
-- 缓存与预读
-- 日志或写时复制
+- 磁盘 I/O 模拟层（Phase 1 ✅）
+- 块分配器与位图管理（Phase 1 ✅）
+- Inode 管理与缓存（Phase 2 ✅）
+- 目录操作与路径解析（Phase 2 ✅）
+- 文件创建、删除、读写（Phase 2 ✅）
+- 缓冲区缓存（Phase 3 - 计划中）
+- 日志或写时复制（Phase 4 - 计划中）
 
 **关键不变量**：
 - 崩溃一致性：崩溃后文件系统仍然可用
 - 原子性：操作要么全部完成，要么全部不完成
+- 引用计数正确性：inode 引用计数与实际引用匹配
+- 块分配一致性：已分配块不会被重复分配
 
 **验证方法**：
-- 单元测试：测试文件操作
-- 故障注入：模拟磁盘损坏、断电
-- Fuzz 测试：生成随机文件操作序列
+- 单元测试：12 个测试全部通过
+  - Phase 1: 3 个测试（磁盘初始化、读写、块分配）
+  - Phase 2: 9 个测试（inode 操作、I/O、目录、路径、文件）
+- 集成测试：文件系统创建、文件操作、目录遍历
+- 代码统计：~2570 行源代码和测试代码
+
+**快速开始**：
+```bash
+git clone https://github.com/first-principles-cs/simple-fs.git
+cd simple-fs
+make
+./mkfs fs.img
+make test
+```
 
 **关联课程**：Module C - 单机系统
 

@@ -193,6 +193,122 @@ make
 make qemu
 ```
 
+### 4. Simple-FS 仓库（简单文件系统）
+
+**仓库地址**：https://github.com/first-principles-cs/simple-fs
+
+**创建时间**：2026-01-24
+
+**状态**：✅ Active
+
+**文件统计**：
+- 25 个文件
+- 2570 行代码
+- 12 个测试（全部通过）
+
+**技术栈**：
+- 语言：C
+- 构建系统：Makefile
+- 测试框架：自定义单元测试
+- 设计基础：xv6 文件系统
+
+**实现的组件**：
+
+**Phase 1: 磁盘 I/O 和块分配（已完成 ✅）**
+
+1. **磁盘 I/O 层（disk.c）** - 112 行
+   - 块级读写操作
+   - 磁盘镜像创建和管理
+   - 4KB 块大小
+   - 断言保护
+
+2. **块分配器（block.c）** - 79 行
+   - 位图管理
+   - balloc/bfree 操作
+   - 块零化
+   - 持久化支持
+
+3. **mkfs 工具（mkfs.c）** - 245 行
+   - 文件系统格式化
+   - 超级块初始化
+   - 根目录创建
+   - Inode 和位图初始化
+
+**Phase 2: Inode 和目录操作（已完成 ✅）**
+
+1. **锁基础设施（lock.c）** - 28 行
+   - pthread_mutex 封装
+   - Spinlock 接口
+   - 锁获取/释放
+
+2. **Inode 管理（inode.c）** - 338 行
+   - 内存 inode 缓存（50 个条目）
+   - 引用计数
+   - Inode 分配/释放
+   - 块映射（直接块 + 间接块）
+   - 文件 I/O（read/write）
+   - Inode 截断
+
+3. **目录操作（dir.c）** - 106 行
+   - 目录查找
+   - 添加/删除目录项
+   - 目录空检查
+   - 线性扫描实现
+
+4. **路径解析（namei.c）** - 92 行
+   - 绝对路径支持
+   - 路径组件解析
+   - 父目录查找
+   - 迭代实现
+
+5. **文件操作（file.c）** - 118 行
+   - 文件/目录创建
+   - 文件/目录删除
+   - 链接管理
+   - "." 和 ".." 支持
+
+**核心特性**：
+- 基于 xv6 设计的简单文件系统
+- 支持直接块（0-11）和间接块（12）
+- 最大文件大小：~4MB
+- 线程安全的 inode 操作
+- 持久化到磁盘镜像
+
+**关键不变量**：
+- 引用计数正确性：inode 引用计数与实际引用匹配
+- 块分配一致性：已分配块不会被重复分配
+- 目录一致性：目录项与 inode 状态一致
+- 锁顺序：避免死锁的锁获取顺序
+
+**测试覆盖**：
+- Phase 1 测试（3 个）：
+  - 磁盘初始化
+  - 磁盘读写
+  - 块分配器
+- Phase 2 测试（9 个）：
+  - Inode 分配
+  - Inode 缓存
+  - Inode I/O
+  - 块映射
+  - 目录操作
+  - 路径解析
+  - 文件创建
+  - 文件删除
+  - 集成测试
+
+**快速开始**：
+```bash
+git clone https://github.com/first-principles-cs/simple-fs.git
+cd simple-fs
+make
+./mkfs fs.img
+make test
+```
+
+**下一步计划**：
+- Phase 3: 缓冲区缓存（Buffer Cache）
+- Phase 4: 日志或写时复制（Logging/COW）
+
 ## 当前状态
 
 ### 完成度
@@ -204,6 +320,7 @@ make qemu
 | Q1 项目 1: tiny-interpreter | ✅ 完成 | 2026-01-22 |
 | Q1 项目 2: simple-compiler | ✅ 完成 | 2026-01-22 |
 | Q2 项目 1: mini-os | ✅ 完成 | 2026-01-24 |
+| Q2 项目 2: simple-fs (Phase 1-2) | ✅ 完成 | 2026-01-24 |
 
 ### 仓库状态
 
@@ -213,7 +330,7 @@ make qemu
 | tiny-interpreter | ✅ Active | [链接](https://github.com/first-principles-cs/tiny-interpreter) | 21 | 1700+ | 43 |
 | simple-compiler | ✅ Active | [链接](https://github.com/first-principles-cs/simple-compiler) | 32 | 1982 | 75 |
 | mini-os | ✅ Active | [链接](https://github.com/first-principles-cs/mini-os) | 35 | 2000+ | 7 |
-| simple-fs | 📋 Planned | - | - | - | - |
+| simple-fs | ✅ Active | [链接](https://github.com/first-principles-cs/simple-fs) | 25 | 2570 | 12 |
 | storage-engine | 📋 Planned | - | - | - | - |
 | tx-manager | 📋 Planned | - | - | - | - |
 | consensus | 📋 Planned | - | - | - | - |
@@ -221,10 +338,10 @@ make qemu
 
 ### 累计统计
 
-- **总仓库数**：3 个（1 个文档仓库 + 3 个系统仓库）
-- **总文件数**：78 个
-- **总代码行数**：7200+ 行
-- **总测试数**：125 个
+- **总仓库数**：5 个（1 个文档仓库 + 4 个系统仓库）
+- **总文件数**：135 个
+- **总代码行数**：11750+ 行
+- **总测试数**：137 个
 - **测试通过率**：100%
 
 ## 技术决策记录
