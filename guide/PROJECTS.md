@@ -10,7 +10,7 @@
 | simple-compiler | active | 简单编译器，理解代码生成 | `python -m src.simple_compiler.main examples/gcd.sl` | 类型安全、内存安全 | Module B |
 | mini-os | active | 最小操作系统内核，理解进程与内存 | `make qemu` | 进程隔离、内存保护 | Module C |
 | simple-fs | active | 简单文件系统，理解持久化与一致性 | `./mkfs disk.img` | 崩溃一致性、原子性 | Module C |
-| storage-engine | planned | 存储引擎，理解索引与持久化 | `./storage-bench` | 持久化、有序性 | Module D |
+| storage-engine | active | 存储引擎，理解索引与持久化 | `./storage-bench` | 持久化、有序性 | Module D |
 | tx-manager | planned | 事务管理器，理解并发控制 | `./tx-test` | ACID 性质 | Module D |
 | consensus | planned | 共识协议，理解分布式一致性 | `./raft-node` | 安全性、活性 | Module E |
 | dist-kv | planned | 分布式键值存储，理解容错 | `./kv-server` | 线性一致性 | Module E |
@@ -170,21 +170,38 @@ make test
 
 ### storage-engine
 
-**目标**：实现一个存储引擎，理解索引结构与持久化。
+**状态**：✅ Active - [GitHub 仓库](https://github.com/first-principles-cs/storage-engine)
+
+**目标**：实现一个基于 LSM-tree 的存储引擎，理解索引结构与持久化。
 
 **核心特性**：
-- LSM-tree 或 B-tree
-- 压缩与合并
-- 预写日志
+- Skip List 内存索引（Phase 1 ✅）
+- MemTable 封装（Phase 1 ✅）
+- 内存 put/get/delete（Phase 1 ✅）
+- 写前日志 WAL（Phase 2 计划中）
+- SSTable 磁盘存储（Phase 3 计划中）
+- 多层 LSM 与 Compaction（Phase 4 计划中）
+- Block Cache 与基准测试（Phase 5 计划中）
 
 **关键不变量**：
 - 持久化：写入的数据不会丢失
 - 有序性：范围查询返回有序结果
+- 一致性：Compaction 不丢失数据
+- 原子性：操作要么全部完成，要么全部不完成
 
 **验证方法**：
-- 单元测试：测试索引操作
-- 基准测试：对比不同索引结构的性能
-- 故障注入：测试崩溃恢复
+- 单元测试：12 个测试覆盖 Phase 1 功能
+  - Skip List: 5 个测试
+  - MemTable: 2 个测试
+  - Storage API: 5 个测试
+- 基准测试：Phase 5 完成后提供性能数据
+
+**快速开始**：
+```bash
+git clone https://github.com/first-principles-cs/storage-engine.git
+cd storage-engine
+make test
+```
 
 **关联课程**：Module D - 数据系统
 
