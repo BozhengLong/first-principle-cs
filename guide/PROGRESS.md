@@ -1,6 +1,6 @@
 # 项目进度记录
 
-**最后更新**：2026-01-28
+**最后更新**：2026-01-29
 
 ## 项目概述
 
@@ -491,6 +491,155 @@ make test
 
 **项目状态**：✅ 全部 5 个阶段已完成
 
+### 6. TX-Manager 仓库（事务管理器）
+
+**仓库地址**：https://github.com/first-principles-cs/tx-manager
+
+**创建时间**：2026-01-29
+
+**状态**：✅ Complete
+
+**文件统计**：
+- 27 个文件
+- 3300+ 行代码
+- 36 个测试（全部通过）
+
+**技术栈**：
+- 语言：C
+- 构建系统：Makefile
+- 测试框架：自定义单元测试
+- 并发控制：MVCC (Multi-Version Concurrency Control)
+- 隔离级别：Snapshot Isolation
+
+**实现的组件**：
+
+**Phase 1: 基础事务框架（已完成 ✅）**
+
+1. **类型定义（types.h）** - 状态码和类型
+   - tx_status_t：OK, NOT_FOUND, CONFLICT, ABORTED, IO_ERROR 等
+   - tx_state_t：ACTIVE, COMMITTED, ABORTED
+
+2. **版本编码（version.c）** - 80 行
+   - 版本化 key 编码（key + \0 + 反转时间戳）
+   - 新版本排在前面（便于查找最新版本）
+
+3. **事务描述符（tx.c）** - 150 行
+   - 事务 ID 和时间戳管理
+   - 写集合缓冲
+   - 事务状态跟踪
+
+4. **事务管理器（tx_manager.c）** - 400 行
+   - tx_begin/tx_commit/tx_abort
+   - tx_put/tx_get/tx_delete
+   - 活跃事务跟踪
+
+**Phase 2: MVCC 读路径（已完成 ✅）**
+
+5. **可见性规则（visibility.c）** - 80 行
+   - is_version_visible()：版本 <= 事务快照时间戳
+   - get_min_active_snapshot()：GC 安全时间戳
+   - Read-your-writes 语义
+
+**Phase 3: MVCC 写路径（已完成 ✅）**
+
+6. **写集合管理（write_set.c）** - 60 行
+   - 写操作缓冲
+   - 提交时批量应用
+
+7. **冲突检测（conflict.c）** - 100 行
+   - check_write_conflicts()：写-写冲突检测
+   - get_latest_commit_ts()：获取 key 最新版本
+   - First-committer-wins 策略
+
+**Phase 4: 崩溃恢复（已完成 ✅）**
+
+8. **事务 WAL（tx_wal.c）** - 200 行
+   - 记录类型：BEGIN, WRITE, COMMIT, ABORT
+   - CRC32 校验
+   - 同步写入
+
+9. **恢复（recovery.c）** - 150 行
+   - WAL 扫描
+   - 事务 ID/时间戳恢复
+   - 未提交事务处理
+
+**Phase 5: GC 和迭代器（已完成 ✅）**
+
+10. **垃圾回收（gc.c）** - 90 行
+    - tx_gc_safe_ts()：安全回收时间戳
+    - tx_gc_run()：扫描并标记可回收版本
+
+11. **MVCC 迭代器（tx_iter.c）** - 190 行
+    - 事务感知的范围扫描
+    - 自动跳过不可见版本
+    - 自动跳过 tombstone
+
+**核心特性**：
+- MVCC 多版本并发控制
+- Snapshot Isolation 隔离级别
+- 写-写冲突检测（First-committer-wins）
+- 事务 WAL 持久化
+- 崩溃恢复
+- 垃圾回收
+- MVCC 感知迭代器
+
+**关键不变量**：
+- 原子性：事务的所有写要么全部应用，要么全部不应用
+- 一致性：只有已提交数据对其他事务可见
+- 隔离性：事务看到数据库的一致快照
+- 持久性：已提交事务在崩溃后仍然存在
+
+**测试覆盖**：
+- Phase 1 测试（8 个）：
+  - 管理器生命周期
+  - 事务 begin/abort/commit
+  - put/get 同一事务
+  - commit 持久化
+  - abort 丢弃
+  - delete 操作
+  - 多 key 操作
+- Phase 2 测试（8 个）：
+  - 读取快照前已提交数据
+  - 不读取未提交数据
+  - 不读取快照后提交的数据
+  - Read-your-writes
+  - Read-your-deletes
+  - 多版本读取
+  - 可见性函数
+  - 同事务覆盖
+- Phase 3 测试（8 个）：
+  - 不同 key 无冲突
+  - First-committer-wins
+  - 中止事务写不可见
+  - 读后更新冲突
+  - 只读事务无冲突
+  - 部分冲突
+  - 冲突后验证
+  - 删除冲突
+- Phase 4 测试（6 个）：
+  - WAL 生命周期
+  - WAL 日志提交
+  - 无 WAL 恢复
+  - 恢复计数器
+  - 提交后重启存活
+  - 多事务存活
+- Phase 5 测试（6 个）：
+  - GC 安全时间戳
+  - GC 运行
+  - 迭代器基本操作
+  - 迭代器可见性
+  - 迭代器跳过 tombstone
+  - 迭代器 seek
+
+**快速开始**：
+```bash
+git clone https://github.com/first-principles-cs/tx-manager.git
+cd tx-manager
+make test
+```
+
+**项目状态**：✅ 全部 5 个阶段已完成
+
 ## 当前状态
 
 ### 完成度
@@ -508,6 +657,7 @@ make test
 | Q3 项目 1: storage-engine (Phase 3) | ✅ 完成 | 2026-01-28 |
 | Q3 项目 1: storage-engine (Phase 4) | ✅ 完成 | 2026-01-28 |
 | Q3 项目 1: storage-engine (Phase 5) | ✅ 完成 | 2026-01-28 |
+| Q3 项目 2: tx-manager (All Phases) | ✅ 完成 | 2026-01-29 |
 
 ### 仓库状态
 
@@ -519,16 +669,16 @@ make test
 | mini-os | ✅ Active | [链接](https://github.com/first-principles-cs/mini-os) | 35 | 2000+ | 7 |
 | simple-fs | ✅ Complete | [链接](https://github.com/first-principles-cs/simple-fs) | 30+ | 3500+ | 31 |
 | storage-engine | ✅ Complete | [链接](https://github.com/first-principles-cs/storage-engine) | 23 | 3500+ | 47 |
-| tx-manager | 📋 Planned | - | - | - | - |
+| tx-manager | ✅ Complete | [链接](https://github.com/first-principles-cs/tx-manager) | 27 | 3300+ | 36 |
 | consensus | 📋 Planned | - | - | - | - |
 | dist-kv | 📋 Planned | - | - | - | - |
 
 ### 累计统计
 
-- **总仓库数**：6 个（1 个文档仓库 + 5 个系统仓库）
-- **总文件数**：165+ 个
-- **总代码行数**：16200+ 行
-- **总测试数**：203 个
+- **总仓库数**：7 个（1 个文档仓库 + 6 个系统仓库）
+- **总文件数**：190+ 个
+- **总代码行数**：19500+ 行
+- **总测试数**：239 个
 - **测试通过率**：100%
 
 ## 技术决策记录
