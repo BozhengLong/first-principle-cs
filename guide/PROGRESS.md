@@ -887,6 +887,213 @@ make bench_throughput && ./bench_throughput  # Benchmarks
 
 **项目状态**：✅ 全部 8 个阶段已完成
 
+### 8. Dist-KV 仓库（分布式键值存储）
+
+**仓库地址**：https://github.com/first-principles-cs/dist-kv
+
+**创建时间**：2026-02-03
+
+**状态**：✅ Complete
+
+**文件统计**：
+- 38 个文件
+- 5942 行代码
+- 60 个测试（全部通过）
+
+**技术栈**：
+- 语言：C
+- 构建系统：Makefile
+- 测试框架：自定义单元测试
+- 依赖项目：consensus (Raft), storage-engine (LSM-tree)
+
+**实现的组件**：
+
+**Phase 1: 基础结构（已完成 ✅）**
+
+1. **类型定义（types.h）** - 状态码和类型
+   - kv_status_t：OK, NOT_FOUND, TIMEOUT, CONFLICT 等
+   - node_state_t：JOINING, ACTIVE, LEAVING, FAILED
+   - partition_state_t：ACTIVE, MIGRATING, INACTIVE
+   - consistency_level_t：LINEARIZABLE, EVENTUAL
+
+2. **参数配置（param.h）** - 可调参数
+   - 虚拟节点数、复制因子
+   - 超时时间、心跳间隔
+
+3. **一致性哈希（hash_ring.c）** - 310 行
+   - 虚拟节点支持
+   - 最小化数据迁移
+   - 分布统计
+
+4. **节点管理（node.c）** - 150 行
+   - 节点生命周期
+   - 配置验证
+
+**Phase 2: 分区管理（已完成 ✅）**
+
+5. **分区管理（partition.c）** - 250 行
+   - 分区创建/销毁
+   - 副本管理
+   - Leader 跟踪
+
+6. **协调器（coordinator.c）** - 300 行
+   - 请求路由
+   - 分区分配
+   - 重平衡
+
+7. **RPC 消息（rpc.h）** - 100 行
+   - 消息类型定义
+   - 序列化/反序列化
+
+**Phase 3: 复制层（已完成 ✅）**
+
+8. **Raft 组（raft_group.c）** - 300 行
+   - Raft 共识封装
+   - Leader 选举
+   - 日志复制
+
+9. **存储适配器（storage_adapter.c）** - 200 行
+   - 内存存储（简化 LSM-tree 接口）
+   - Put/Get/Delete 操作
+   - 快照支持
+
+10. **复制逻辑（replication.c）** - 250 行
+    - 线性一致性读写
+    - 本地读（最终一致性）
+    - 多节点复制
+
+**Phase 4: 容错机制（已完成 ✅）**
+
+11. **Gossip 协议（gossip.c）** - 300 行
+    - SWIM 故障检测
+    - 成员管理
+    - 状态传播
+
+12. **故障转移（failover.c）** - 200 行
+    - 自动故障检测
+    - 分区重分配
+    - Leader 选举触发
+
+13. **网络模拟器（network_sim.c）** - 200 行
+    - 网络分区模拟
+    - 消息丢失/延迟
+    - 测试支持
+
+**Phase 5: 客户端 API（已完成 ✅）**
+
+14. **客户端（client.c）** - 300 行
+    - Put/Get/Delete API
+    - 批量操作
+    - 超时处理
+    - Leader 重定向
+
+15. **管理操作（admin.c）** - 200 行
+    - 节点添加/删除
+    - 重平衡触发
+    - 集群信息
+
+16. **迭代器（iterator.c）** - 150 行
+    - 范围扫描
+    - 前缀查询
+
+**Phase 6: 集成测试（已完成 ✅）**
+
+17. **集成测试（test_integration.c）** - 500 行
+    - 基本集群操作
+    - 节点故障测试
+    - 网络分区测试
+    - 一致性测试
+    - 基准测试
+
+**核心特性**：
+- 一致性哈希 + 虚拟节点
+- 每分区独立 Raft 组
+- SWIM 故障检测
+- 自动故障转移
+- 线性一致性 / 最终一致性
+- 网络分区容错
+
+**关键不变量**：
+- 一致性模型：线性一致性（通过 Raft）或最终一致性（本地读）
+- 可用性：当 f < n/2 节点故障时系统保持可用
+- 分区容错：网络分区时少数派变为只读
+
+**测试覆盖**：
+- Phase 1 测试（10 个）：
+  - 哈希环创建/销毁
+  - 节点添加/删除
+  - Key 路由
+  - 副本分配
+  - 分布均匀性
+  - 最小迁移
+  - 节点生命周期
+  - 配置验证
+  - 哈希一致性
+- Phase 2 测试（10 个）：
+  - 分区创建/销毁
+  - 副本管理
+  - Key 到分区映射
+  - 协调器生命周期
+  - 分区路由
+  - 节点添加/删除
+  - 重平衡
+  - Leader 跟踪
+  - RPC 序列化
+  - 多分区
+- Phase 3 测试（10 个）：
+  - Raft 组生命周期
+  - 单节点 Leader
+  - 提议/提交
+  - 存储 Put/Get
+  - 存储 Delete
+  - 快照
+  - 复制 Put/Get
+  - 线性化读
+  - 本地读
+  - 多节点
+- Phase 4 测试（10 个）：
+  - Gossip 生命周期
+  - 成员管理
+  - 故障检测
+  - 恢复检测
+  - 状态传播
+  - 分区重分配
+  - Leader 选举
+  - 网络分区处理
+  - 分区恢复
+  - 少数派只读
+- Phase 5 测试（10 个）：
+  - 客户端生命周期
+  - Put/Get
+  - Delete
+  - 批量 Put
+  - 超时处理
+  - Leader 重定向
+  - 管理节点操作
+  - 重平衡
+  - 范围扫描
+  - 集群信息
+- Phase 6 测试（10 个）：
+  - 基本集群
+  - 节点故障
+  - 网络分区
+  - 分区恢复
+  - 线性一致性
+  - 最终一致性
+  - 吞吐量基准
+  - 延迟基准
+  - 混合负载
+  - 混沌测试
+
+**快速开始**：
+```bash
+git clone https://github.com/first-principles-cs/dist-kv.git
+cd dist-kv
+make test  # Run all 60 tests
+```
+
+**项目状态**：✅ 全部 6 个阶段已完成
+
 ## 当前状态
 
 ### 完成度
@@ -913,6 +1120,7 @@ make bench_throughput && ./bench_throughput  # Benchmarks
 | Q4 项目 1: consensus (Phase 6) | ✅ 完成 | 2026-02-03 |
 | Q4 项目 1: consensus (Phase 7) | ✅ 完成 | 2026-02-03 |
 | Q4 项目 1: consensus (Phase 8) | ✅ 完成 | 2026-02-03 |
+| Q4 项目 2: dist-kv (All Phases) | ✅ 完成 | 2026-02-03 |
 
 ### 仓库状态
 
@@ -926,14 +1134,14 @@ make bench_throughput && ./bench_throughput  # Benchmarks
 | storage-engine | ✅ Complete | [链接](https://github.com/first-principles-cs/storage-engine) | 23 | 3500+ | 47 |
 | tx-manager | ✅ Complete | [链接](https://github.com/first-principles-cs/tx-manager) | 27 | 3300+ | 36 |
 | consensus | ✅ Complete | [链接](https://github.com/first-principles-cs/consensus) | 31+ | 5700+ | 71 |
-| dist-kv | 📋 Planned | - | - | - | - |
+| dist-kv | ✅ Complete | [链接](https://github.com/first-principles-cs/dist-kv) | 38 | 5942 | 60 |
 
 ### 累计统计
 
-- **总仓库数**：8 个（1 个文档仓库 + 7 个系统仓库）
-- **总文件数**：221+ 个
-- **总代码行数**：25200+ 行
-- **总测试数**：310 个
+- **总仓库数**：9 个（1 个文档仓库 + 8 个系统仓库）
+- **总文件数**：259+ 个
+- **总代码行数**：31100+ 行
+- **总测试数**：370 个
 - **测试通过率**：100%
 
 ## 技术决策记录
