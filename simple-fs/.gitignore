@@ -1,0 +1,24 @@
+# Build artifacts
+*.o
+*.a
+mkfs
+test_phase1
+test_phase2
+test_phase3
+test_phase4
+
+# File system images
+*.img
+
+# macOS
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Debug files
+*.dSYM/

@@ -1,0 +1,77 @@
+#ifndef TRAP_H
+#define TRAP_H
+
+// x86 trap and interrupt constants
+
+// Processor-defined exceptions
+#define T_DIVIDE         0      // divide error
+#define T_DEBUG          1      // debug exception
+#define T_NMI            2      // non-maskable interrupt
+#define T_BRKPT          3      // breakpoint
+#define T_OFLOW          4      // overflow
+#define T_BOUND          5      // bounds check
+#define T_ILLOP          6      // illegal opcode
+#define T_DEVICE         7      // device not available
+#define T_DBLFLT         8      // double fault
+// #define T_COPROC      9      // reserved (not used since 486)
+#define T_TSS           10      // invalid task switch segment
+#define T_SEGNP         11      // segment not present
+#define T_STACK         12      // stack exception
+#define T_GPFLT         13      // general protection fault
+#define T_PGFLT         14      // page fault
+// #define T_RES        15      // reserved
+#define T_FPERR         16      // floating point error
+#define T_ALIGN         17      // alignment check
+#define T_MCHK          18      // machine check
+#define T_SIMDERR       19      // SIMD floating point error
+
+// Hardware IRQs
+#define T_IRQ0          32      // IRQ 0 corresponds to int T_IRQ
+
+#define IRQ_TIMER        0
+#define IRQ_KBD          1
+#define IRQ_COM1         4
+#define IRQ_IDE         14
+#define IRQ_ERROR       19
+#define IRQ_SPURIOUS    31
+
+// System call
+#define T_SYSCALL       64      // system call (INT 0x40)
+
+// Trap frame structure
+struct trapframe {
+    // Registers as pushed by pusha
+    uint edi;
+    uint esi;
+    uint ebp;
+    uint oesp;      // useless & ignored
+    uint ebx;
+    uint edx;
+    uint ecx;
+    uint eax;
+
+    // Rest of trap frame
+    uint16_t gs;
+    uint16_t padding1;
+    uint16_t fs;
+    uint16_t padding2;
+    uint16_t es;
+    uint16_t padding3;
+    uint16_t ds;
+    uint16_t padding4;
+    uint trapno;
+
+    // Below here defined by x86 hardware
+    uint err;
+    uint eip;
+    uint16_t cs;
+    uint16_t padding5;
+    uint eflags;
+
+    // Below here only when crossing rings, such as from user to kernel
+    uint esp;
+    uint16_t ss;
+    uint16_t padding6;
+};
+
+#endif // TRAP_H

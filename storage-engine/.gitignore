@@ -1,0 +1,38 @@
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+
+# Executables
+storage-bench
+test_phase1
+test_phase2
+test_phase3
+test_phase4
+test_phase5
+
+# Debug symbols
+*.dSYM/
+
+# Test data files
+*.db
+*.wal
+*.sst
+test_*.img
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Coverage
+*.gcno
+*.gcda
+*.gcov
+coverage/

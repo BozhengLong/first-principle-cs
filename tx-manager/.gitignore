@@ -1,0 +1,16 @@
+# Compiled objects
+*.o
+*.dSYM/
+
+# Test executables
+test_phase1
+test_phase2
+test_phase3
+test_phase4
+test_phase5
+
+# Benchmark
+tx-bench
+
+# macOS
+.DS_Store

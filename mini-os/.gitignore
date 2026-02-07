@@ -1,0 +1,31 @@
+# Build artifacts
+*.o
+*.d
+*.bin
+*.elf
+*.img
+*.iso
+
+# Kernel binary (in root directory only)
+/kernel.elf
+/kernel.bin
+
+# QEMU files
+*.log
+
+# GDB files
+.gdb_history
+
+# Editor files
+*.swp
+*.swo
+*~
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+
+# Test outputs
+test_results/
+*.test
