@@ -1,3 +1,7 @@
+[中文](README.md) | [English](README.en.md)
+
+---
+
 # first-principles-cs
 
 AI 时代的第一性原理计算机科学课程体系。
@@ -19,10 +23,10 @@ AI 时代的第一性原理计算机科学课程体系。
 
 ## 文档导航
 
-- [WHY - 为什么做这个项目](./guide/WHY.md)
-- [ROADMAP - 12 个月路线图](./guide/ROADMAP.md)
-- [PROJECTS - 核心系统仓库清单](./guide/PROJECTS.md)
-- [PROGRESS - 项目进度记录](./guide/PROGRESS.md) 📊
+- [WHY - 为什么做这个项目](./docs/why.md)
+- [ROADMAP - 12 个月路线图](./docs/roadmap.md)
+- [PROJECTS - 核心系统仓库清单](./docs/projects.md)
+- [PROGRESS - 项目进度记录](./docs/progress.md) 📊
 - [原则文档](./principles/) - 四大原则的详细说明
 - [课程体系](./courses/) - 六大模块的学习路径
 

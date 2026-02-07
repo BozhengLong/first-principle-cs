@@ -79,9 +79,9 @@ mini-os/
 
 ## Documentation
 
-- [Design Document](docs/design.md) - System design and architecture
-- [Architecture](docs/architecture.md) - Component architecture
-- [System Call Specification](docs/syscall-spec.md) - System call interface
+- [Design Document](docs/design.md) — System design and architecture
+- [Architecture](docs/architecture.md) — Component architecture
+- [System Call Specification](docs/syscall-spec.md) — System call interface
 
 ## Testing
 
@@ -100,12 +100,8 @@ This project is inspired by:
 
 ## License
 
-MIT License - see LICENSE file for details
+MIT License — see LICENSE file for details
 
-## Contributing
+## Related Course
 
-This is a learning project. Feel free to fork and experiment!
-
-## Acknowledgments
-
-Based on concepts from xv6 and MIT 6.828 course materials.
+This project is part of the [first-principles-cs](https://github.com/first-principles-cs/guide) curriculum — Module C: Single-Machine Systems.

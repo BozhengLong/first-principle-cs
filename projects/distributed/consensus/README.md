@@ -1,3 +1,7 @@
+[中文](README.md) | [English](README.en.md)
+
+---
+
 # Consensus (Raft)
 
 A Raft consensus protocol implementation in C for learning distributed systems concepts.

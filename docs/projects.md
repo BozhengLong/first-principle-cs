@@ -1,3 +1,7 @@
+[中文](projects.md) | [English](projects.en.md)
+
+---
+
 # PROJECTS - 核心系统仓库清单
 
 本文档列出所有计划中的系统仓库，包括状态、目标、关键不变量等信息。

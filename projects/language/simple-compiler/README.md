@@ -1,3 +1,7 @@
+[中文](README.md) | [English](README.en.md)
+
+---
+
 # simple-compiler
 
 一个简单的编译器，将类 C 语言（SimpleLang）编译到基于栈的字节码。

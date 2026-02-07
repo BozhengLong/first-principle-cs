@@ -79,3 +79,7 @@ make test_phase2
 1. **Consistency Model**: Linearizable (via Raft) or eventual (local reads)
 2. **Availability**: System remains available when f < n/2 nodes fail
 3. **Partition Tolerance**: Minority partition becomes read-only
+
+## Related Course
+
+Part of the [first-principles-cs](https://github.com/first-principles-cs/guide) curriculum — Module E: Networking & Distributed Systems.

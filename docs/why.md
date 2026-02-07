@@ -1,3 +1,7 @@
+[中文](why.md) | [English](why.en.md)
+
+---
+
 # WHY - 为什么做这个项目
 
 > "What I cannot create, I do not understand." — Richard Feynman

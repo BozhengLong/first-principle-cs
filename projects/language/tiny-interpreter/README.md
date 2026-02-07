@@ -1,3 +1,7 @@
+[中文](README.md) | [English](README.en.md)
+
+---
+
 # Tiny Interpreter
 
 > 从零实现一个编程语言解释器，理解程序是如何被"读懂"和"执行"的。

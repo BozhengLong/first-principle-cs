@@ -1,3 +1,7 @@
+[中文](README.md) | [English](README.en.md)
+
+---
+
 # simple-fs: A Simple File System Implementation
 
 A minimal file system implementation for educational purposes, demonstrating core concepts of file systems, crash consistency, and journaling.
