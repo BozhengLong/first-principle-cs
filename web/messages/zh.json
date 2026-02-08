@@ -1,0 +1,65 @@
+{
+  "common": {
+    "appName": "第一性原理计算机科学",
+    "startLearning": "开始学习",
+    "codeEditor": "代码编辑器",
+    "visualization": "可视化",
+    "aiAssistant": "AI 助教",
+    "comingSoon": "即将到来",
+    "codeEditorPlaceholder": "代码编辑器即将到来",
+    "vizPlaceholder": "可视化即将到来",
+    "aiPlaceholder": "AI 助教即将到来",
+    "collapsePanel": "收起面板",
+    "expandPanel": "展开面板",
+    "lightMode": "浅色模式",
+    "darkMode": "深色模式",
+    "toggleTheme": "切换主题",
+    "switchLanguage": "切换语言"
+  },
+  "home": {
+    "title": "从零构建，理解本质",
+    "subtitle": "通过亲手构建 8 个核心系统，真正理解计算机科学的基础设施是如何被搭建起来的",
+    "startProject": "开始第一个项目"
+  },
+  "nav": {
+    "projects": "项目",
+    "language": "编程语言",
+    "systems": "操作系统",
+    "data": "数据存储",
+    "distributed": "分布式系统"
+  },
+  "projects": {
+    "tiny-interpreter": {
+      "name": "Tiny Interpreter",
+      "description": "从零构建解释器，理解代码如何被执行"
+    },
+    "simple-compiler": {
+      "name": "Simple Compiler",
+      "description": "构建编译器，理解高级语言到机器码的转换"
+    },
+    "mini-os": {
+      "name": "Mini OS",
+      "description": "构建微型操作系统，理解进程与内存管理"
+    },
+    "simple-fs": {
+      "name": "Simple FS",
+      "description": "构建文件系统，理解数据如何持久化存储"
+    },
+    "storage-engine": {
+      "name": "Storage Engine",
+      "description": "构建存储引擎，理解数据库底层原理"
+    },
+    "tx-manager": {
+      "name": "Tx Manager",
+      "description": "构建事务管理器，理解 ACID 与并发控制"
+    },
+    "consensus": {
+      "name": "Consensus",
+      "description": "实现共识算法，理解分布式一致性"
+    },
+    "dist-kv": {
+      "name": "Dist KV",
+      "description": "构建分布式键值存储，理解分片与复制"
+    }
+  }
+}

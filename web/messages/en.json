@@ -1,0 +1,65 @@
+{
+  "common": {
+    "appName": "First Principles CS",
+    "startLearning": "Start Learning",
+    "codeEditor": "Code Editor",
+    "visualization": "Visualization",
+    "aiAssistant": "AI Assistant",
+    "comingSoon": "Coming Soon",
+    "codeEditorPlaceholder": "Code editor coming soon",
+    "vizPlaceholder": "Visualization coming soon",
+    "aiPlaceholder": "AI assistant coming soon",
+    "collapsePanel": "Collapse panel",
+    "expandPanel": "Expand panel",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "toggleTheme": "Toggle theme",
+    "switchLanguage": "Switch language"
+  },
+  "home": {
+    "title": "Build from Scratch, Understand the Essence",
+    "subtitle": "Truly understand how computer science infrastructure is built by constructing 8 core systems from the ground up",
+    "startProject": "Start First Project"
+  },
+  "nav": {
+    "projects": "Projects",
+    "language": "Language",
+    "systems": "Systems",
+    "data": "Data",
+    "distributed": "Distributed"
+  },
+  "projects": {
+    "tiny-interpreter": {
+      "name": "Tiny Interpreter",
+      "description": "Build an interpreter from scratch to understand how code executes"
+    },
+    "simple-compiler": {
+      "name": "Simple Compiler",
+      "description": "Build a compiler to understand the translation from high-level language to machine code"
+    },
+    "mini-os": {
+      "name": "Mini OS",
+      "description": "Build a tiny OS to understand process and memory management"
+    },
+    "simple-fs": {
+      "name": "Simple FS",
+      "description": "Build a file system to understand persistent data storage"
+    },
+    "storage-engine": {
+      "name": "Storage Engine",
+      "description": "Build a storage engine to understand database internals"
+    },
+    "tx-manager": {
+      "name": "Tx Manager",
+      "description": "Build a transaction manager to understand ACID and concurrency control"
+    },
+    "consensus": {
+      "name": "Consensus",
+      "description": "Implement consensus algorithms to understand distributed consistency"
+    },
+    "dist-kv": {
+      "name": "Dist KV",
+      "description": "Build a distributed key-value store to understand sharding and replication"
+    }
+  }
+}
