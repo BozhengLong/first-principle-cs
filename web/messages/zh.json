@@ -61,5 +61,23 @@
       "name": "Dist KV",
       "description": "构建分布式键值存储，理解分片与复制"
     }
+  },
+  "learn": {
+    "runTests": "运行测试",
+    "running": "运行中...",
+    "testsPassed": "{passed}/{total} 测试通过",
+    "pyodide_loading": "加载 Python 环境...",
+    "pyodide_installing": "安装 pytest...",
+    "pyodideError": "Python 环境加载失败",
+    "resetCode": "重置代码",
+    "hints": "提示",
+    "hintLevel": "提示 {level}",
+    "unlockPrevious": "先查看上一级提示"
+  },
+  "modules": {
+    "tiny-interpreter": {
+      "module0": "引言",
+      "module1": "词法分析"
+    }
   }
 }

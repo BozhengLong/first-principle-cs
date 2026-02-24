@@ -7,10 +7,16 @@ import { CodePanel } from "./code-panel";
 import { VizPanel } from "./viz-panel";
 import { AiPanel } from "./ai-panel";
 import { cn } from "@/lib/utils";
+import type { LearningModule } from "@/data/types";
 
 type MobileTab = "code" | "viz" | "ai";
 
-export function WorkspaceLayout() {
+interface WorkspaceLayoutProps {
+  project: string;
+  module: LearningModule;
+}
+
+export function WorkspaceLayout({ project, module }: WorkspaceLayoutProps) {
   const [activeTab, setActiveTab] = useState<MobileTab>("code");
   const t = useTranslations("common");
 
@@ -25,11 +31,11 @@ export function WorkspaceLayout() {
       {/* Desktop: side-by-side panels + bottom AI */}
       <div className="hidden flex-1 flex-col md:flex">
         <div className="flex flex-1 min-h-0">
-          <div className="flex-1 p-4">
-            <CodePanel />
+          <div className="flex-1 min-w-0">
+            <CodePanel project={project} module={module} />
           </div>
-          <div className="flex-1 border-l p-4">
-            <VizPanel />
+          <div className="flex-1 min-w-0 border-l">
+            <VizPanel project={project} module={module} />
           </div>
         </div>
         <AiPanel />
@@ -54,9 +60,9 @@ export function WorkspaceLayout() {
             </button>
           ))}
         </div>
-        <div className="flex-1 p-4">
-          {activeTab === "code" && <CodePanel />}
-          {activeTab === "viz" && <VizPanel />}
+        <div className="flex-1 min-h-0">
+          {activeTab === "code" && <CodePanel project={project} module={module} />}
+          {activeTab === "viz" && <VizPanel project={project} module={module} />}
           {activeTab === "ai" && (
             <div className="flex h-full flex-col items-center justify-center rounded-lg border border-dashed bg-muted/30 p-6">
               <Bot className="mb-3 h-10 w-10 text-muted-foreground/50" />

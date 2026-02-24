@@ -1,7 +1,8 @@
+import { redirect } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/projects";
-import { WorkspaceLayout } from "@/components/layout/workspace-layout";
+import { getFirstModule } from "@/data/tiny-interpreter";
 
 const validProjectIds = projects.map((p) => p.id);
 
@@ -22,9 +23,10 @@ export default async function LearnProjectPage({
 
   setRequestLocale(locale);
 
-  return (
-    <div className="h-full">
-      <WorkspaceLayout />
-    </div>
-  );
+  const firstModule = getFirstModule(project);
+  if (firstModule) {
+    redirect(`/${locale}/learn/${project}/${firstModule.slug}`);
+  }
+
+  notFound();
 }

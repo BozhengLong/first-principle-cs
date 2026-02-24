@@ -61,5 +61,23 @@
       "name": "Dist KV",
       "description": "Build a distributed key-value store to understand sharding and replication"
     }
+  },
+  "learn": {
+    "runTests": "Run Tests",
+    "running": "Running...",
+    "testsPassed": "{passed}/{total} tests passed",
+    "pyodide_loading": "Loading Python environment...",
+    "pyodide_installing": "Installing pytest...",
+    "pyodideError": "Failed to load Python environment",
+    "resetCode": "Reset Code",
+    "hints": "Hints",
+    "hintLevel": "Hint {level}",
+    "unlockPrevious": "View previous hint first"
+  },
+  "modules": {
+    "tiny-interpreter": {
+      "module0": "Introduction",
+      "module1": "Lexer"
+    }
   }
 }
