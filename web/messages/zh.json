@@ -77,7 +77,12 @@
   "modules": {
     "tiny-interpreter": {
       "module0": "引言",
-      "module1": "词法分析"
+      "module1": "词法分析",
+      "module2": "语法分析",
+      "module3": "环境模型",
+      "module4": "基础求值",
+      "module5": "Lambda 与闭包",
+      "module6": "整合与扩展"
     }
   }
 }

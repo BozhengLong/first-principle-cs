@@ -5,6 +5,7 @@ declare interface PyodideInterface {
     writeFile(path: string, data: string): void;
     readFile(path: string, opts?: { encoding: string }): string;
     unlink(path: string): void;
+    mkdir(path: string): void;
   };
   globals: {
     get(name: string): unknown;

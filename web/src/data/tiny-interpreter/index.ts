@@ -1,8 +1,21 @@
 import type { LearningModule } from "../types";
 import { module00Introduction } from "./00-introduction";
 import { module01Lexer } from "./01-lexer";
+import { module02Parser } from "./02-parser";
+import { module03Environment } from "./03-environment";
+import { module04EvaluatorBasic } from "./04-evaluator-basic";
+import { module05EvaluatorLambda } from "./05-evaluator-lambda";
+import { module06PuttingTogether } from "./06-putting-together";
 
-const modules: LearningModule[] = [module00Introduction, module01Lexer];
+const modules: LearningModule[] = [
+  module00Introduction,
+  module01Lexer,
+  module02Parser,
+  module03Environment,
+  module04EvaluatorBasic,
+  module05EvaluatorLambda,
+  module06PuttingTogether,
+];
 
 export function getModules(projectId: string): LearningModule[] {
   if (projectId === "tiny-interpreter") return modules;

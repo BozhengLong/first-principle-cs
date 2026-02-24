@@ -8,9 +8,48 @@ const CodeMirrorEditor = dynamic(
     Promise.all([
       import("@uiw/react-codemirror"),
       import("@codemirror/lang-python"),
-    ]).then(([codemirror, pythonLang]) => {
+      import("@codemirror/view"),
+    ]).then(([codemirror, pythonLang, viewMod]) => {
       const CodeMirror = codemirror.default;
       const { python } = pythonLang;
+      const { ViewPlugin, Decoration, EditorView } = viewMod;
+
+      const todoLineMark = Decoration.line({ class: "cm-todo-line" });
+
+      const todoHighlighter = ViewPlugin.fromClass(
+        class {
+          decorations: ReturnType<typeof Decoration.set>;
+          constructor(view: ReturnType<typeof EditorView.prototype.state.doc.toString> extends string ? any : any) {
+            this.decorations = this.buildDecorations(view);
+          }
+          update(update: any) {
+            if (update.docChanged || update.viewportChanged) {
+              this.decorations = this.buildDecorations(update.view);
+            }
+          }
+          buildDecorations(view: any) {
+            const builder: any[] = [];
+            for (const { from, to } of view.visibleRanges) {
+              const doc = view.state.doc;
+              const startLine = doc.lineAt(from).number;
+              const endLine = doc.lineAt(to).number;
+              for (let i = startLine; i <= endLine; i++) {
+                const line = doc.line(i);
+                if (line.text.includes("# TODO")) {
+                  builder.push(todoLineMark.range(line.from));
+                }
+              }
+            }
+            return Decoration.set(builder);
+          }
+        },
+        { decorations: (v: any) => v.decorations }
+      );
+
+      const todoTheme = EditorView.baseTheme({
+        "&light .cm-todo-line": { backgroundColor: "rgba(250, 204, 21, 0.15)" },
+        "&dark .cm-todo-line": { backgroundColor: "rgba(250, 204, 21, 0.10)" },
+      });
 
       return function CodeMirrorWrapper(props: {
         value: string;
@@ -21,7 +60,7 @@ const CodeMirrorEditor = dynamic(
           <CodeMirror
             value={props.value}
             onChange={props.onChange}
-            extensions={[python()]}
+            extensions={[python(), todoHighlighter, todoTheme]}
             theme={props.theme}
             basicSetup={{
               lineNumbers: true,

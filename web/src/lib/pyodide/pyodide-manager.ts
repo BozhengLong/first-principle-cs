@@ -1,3 +1,11 @@
+import {
+  refInit,
+  refLexer,
+  refParser,
+  refEnvironment,
+  refSrcInit,
+} from "@/data/tiny-interpreter/reference-implementations";
+
 type PyodideStatus = "idle" | "loading" | "installing" | "ready" | "error";
 
 let pyodideInstance: PyodideInterface | null = null;
@@ -50,6 +58,8 @@ import micropip
 await micropip.install("pytest")
 `);
 
+      setupReferenceImplementations(pyodideInstance!);
+
       setStatus("ready");
     } catch (e) {
       setStatus("error");
@@ -59,6 +69,19 @@ await micropip.install("pytest")
   })();
 
   return initPromise;
+}
+
+function setupReferenceImplementations(py: PyodideInterface) {
+  // Create /home/pyodide/src/tiny_interpreter/ package in Pyodide's virtual FS
+  // so `from src.tiny_interpreter.X import ...` resolves correctly.
+  try { py.FS.mkdir("/home/pyodide/src"); } catch { /* exists */ }
+  try { py.FS.mkdir("/home/pyodide/src/tiny_interpreter"); } catch { /* exists */ }
+
+  py.FS.writeFile("/home/pyodide/src/__init__.py", refSrcInit);
+  py.FS.writeFile("/home/pyodide/src/tiny_interpreter/__init__.py", refInit);
+  py.FS.writeFile("/home/pyodide/src/tiny_interpreter/lexer.py", refLexer);
+  py.FS.writeFile("/home/pyodide/src/tiny_interpreter/parser.py", refParser);
+  py.FS.writeFile("/home/pyodide/src/tiny_interpreter/environment.py", refEnvironment);
 }
 
 export async function runTests(
@@ -79,7 +102,7 @@ export async function runTests(
   await py.runPythonAsync(`
 import sys
 for mod_name in list(sys.modules.keys()):
-    if mod_name in ("skeleton", "test_skeleton"):
+    if mod_name in ("skeleton", "test_skeleton") or mod_name.startswith("src."):
         del sys.modules[mod_name]
 sys.path = [p for p in sys.path if "/home/pyodide" not in p]
 sys.path.insert(0, "/home/pyodide")
