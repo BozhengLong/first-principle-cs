@@ -6,6 +6,13 @@ export const module01Lexer: LearningModule = {
   slug: "lexer",
   hasCode: true,
   vizType: "tokens",
+  diagnostics: [
+    { pattern: "_allFail", message: { zh: "还没开始？先从 `current_char()` 开始——它只需要返回当前位置的字符", en: "Haven't started? Begin with `current_char()` — it just returns the character at the current position" } },
+    { pattern: ["test_negative_number", "test_minus_as_symbol"], message: { zh: "负数和减号怎么区分？看看 `-` 后面是不是数字", en: "How to tell negative numbers from minus signs? Check if `-` is followed by a digit" } },
+    { pattern: ["test_position_tracking"], message: { zh: "位置追踪出错了。`advance()` 里有没有在换行时重置 column？", en: "Position tracking is off. Does `advance()` reset column on newline?" } },
+    { pattern: ["test_comment", "test_inline_comment"], message: { zh: "注释处理：遇到 `;` 就跳过到行尾", en: "Comment handling: skip everything from `;` to end of line" } },
+    { pattern: ["test_boolean_true", "test_boolean_false", "test_invalid_boolean"], message: { zh: "`#t` 和 `#f` 需要特殊处理——先检查 `#`，再看下一个字符", en: "`#t` and `#f` need special handling — check for `#`, then look at the next character" } },
+  ],
   skeleton: `"""词法分析器骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

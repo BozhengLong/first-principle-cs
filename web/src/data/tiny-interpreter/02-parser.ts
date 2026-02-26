@@ -6,6 +6,12 @@ export const module02Parser: LearningModule = {
   slug: "parser",
   hasCode: true,
   vizType: "ast",
+  diagnostics: [
+    { pattern: "_allFail", message: { zh: "先实现 `current_token()` 和 `advance()`——它们是最基础的", en: "Start with `current_token()` and `advance()` — they're the foundation" } },
+    { pattern: ["test_parse_empty_list", "test_parse_simple_expression"], message: { zh: "`parse_sexp()` 需要循环读取元素直到遇到 `)`", en: "`parse_sexp()` needs to loop reading elements until it hits `)`" } },
+    { pattern: "test_parse_nested_expression", message: { zh: "嵌套表达式需要递归——`parse_expr()` 遇到 `(` 时应该调用 `parse_sexp()`", en: "Nested expressions need recursion — `parse_expr()` should call `parse_sexp()` when it sees `(`" } },
+    { pattern: "test_unclosed_paren", message: { zh: "没有处理未闭合括号？在循环里检查 EOF", en: "Not handling unclosed parens? Check for EOF inside the loop" } },
+  ],
   skeleton: `"""语法分析器骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

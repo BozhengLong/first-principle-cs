@@ -6,6 +6,12 @@ export const module03Environment: LearningModule = {
   slug: "environment",
   hasCode: true,
   vizType: "environment",
+  diagnostics: [
+    { pattern: "_allFail", message: { zh: "`define()` 最简单——把 name→value 存到 `self.bindings` 字典里", en: "`define()` is the simplest — store name→value in `self.bindings` dict" } },
+    { pattern: ["test_get_from_parent", "test_child_shadows_parent", "test_deep_nesting"], message: { zh: "`get()` 在当前环境找不到时，有没有递归查找 `self.parent`？", en: "When `get()` can't find it locally, does it recursively search `self.parent`?" } },
+    { pattern: ["test_set_local", "test_set_in_parent", "test_set_does_not_create"], message: { zh: "`set()` 和 `define()` 不同——它要修改已有的变量，不是创建新的", en: "`set()` differs from `define()` — it modifies existing variables, doesn't create new ones" } },
+    { pattern: ["test_get_undefined_raises", "test_set_undefined_raises", "test_undefined_in_chain"], message: { zh: "找不到变量时应该抛出 `NameError`", en: "Raise `NameError` when a variable isn't found" } },
+  ],
   skeleton: `"""环境模型骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

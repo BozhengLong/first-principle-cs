@@ -1,12 +1,13 @@
 "use client";
 
-import { Play, RotateCcw, Loader2, CheckCircle2, XCircle } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Play, RotateCcw, Loader2, CheckCircle2, XCircle, Lightbulb } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { usePyodide } from "@/hooks/use-pyodide";
 import { useWorkspace } from "@/contexts/workspace-context";
 import { cn } from "@/lib/utils";
+import { matchDiagnostics } from "@/lib/diagnostics/match-diagnostics";
 
 interface TestRunnerProps {
   code: string;
@@ -16,8 +17,11 @@ interface TestRunnerProps {
 
 export function TestRunner({ code, testCode, onReset }: TestRunnerProps) {
   const t = useTranslations("learn");
+  const locale = useLocale() as "zh" | "en";
   const { status, running, results, rawOutput, runTests } = usePyodide();
-  const { runVisualize } = useWorkspace();
+  const { module, runVisualize } = useWorkspace();
+
+  const diagnosticMap = matchDiagnostics(results, module.diagnostics);
 
   const isReady = status === "ready";
   const passed = results.filter((r) => r.passed).length;
@@ -77,6 +81,13 @@ export function TestRunner({ code, testCode, onReset }: TestRunnerProps) {
       {results.length > 0 && (
         <ScrollArea className="max-h-48 border-t">
           <div className="space-y-0.5 p-2">
+            {/* _allFail banner */}
+            {diagnosticMap.has(0) && results.every((r) => !r.passed) && (
+              <div className="mb-2 flex items-center gap-2 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
+                <Lightbulb className="h-4 w-4 shrink-0" />
+                <span>{diagnosticMap.get(0)!.message[locale]}</span>
+              </div>
+            )}
             {results.map((r, i) => (
               <div
                 key={i}
@@ -96,6 +107,12 @@ export function TestRunner({ code, testCode, onReset }: TestRunnerProps) {
                     <pre className="mt-1 whitespace-pre-wrap text-[10px] text-muted-foreground">
                       {r.message}
                     </pre>
+                  )}
+                  {!r.passed && diagnosticMap.has(i) && !results.every((x) => !x.passed) && (
+                    <div className="mt-1 flex items-center gap-1.5 rounded bg-amber-50 px-2 py-1 text-[11px] text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
+                      <Lightbulb className="h-3 w-3 shrink-0" />
+                      <span>{diagnosticMap.get(i)!.message[locale]}</span>
+                    </div>
                   )}
                 </div>
               </div>

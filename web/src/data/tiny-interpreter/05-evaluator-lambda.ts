@@ -6,6 +6,12 @@ export const module05EvaluatorLambda: LearningModule = {
   slug: "evaluator-lambda",
   hasCode: true,
   vizType: "closure",
+  diagnostics: [
+    { pattern: "_allFail", message: { zh: "`eval_lambda()` 要创建 Closure——把参数列表、函数体和当前环境打包", en: "`eval_lambda()` should create a Closure — bundle the param list, body, and current environment" } },
+    { pattern: ["test_closure*", "test_lexical_scope*"], message: { zh: "闭包的关键：新环境的父环境是 `closure.env`（定义时的环境），不是调用时的环境", en: "Key to closures: the new env's parent is `closure.env` (definition-time env), not the call-time env" } },
+    { pattern: "test_wrong_argument_count", message: { zh: "调用闭包前检查参数数量是否匹配", en: "Check argument count matches before calling the closure" } },
+    { pattern: "test_recursion*", message: { zh: "递归能工作说明闭包正确捕获了环境——如果失败，检查环境链", en: "Recursion works when closures correctly capture the environment — if it fails, check the env chain" } },
+  ],
   skeleton: `"""Lambda 与闭包骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

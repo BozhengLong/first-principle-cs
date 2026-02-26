@@ -13,6 +13,7 @@ import { useEditorState } from "@/hooks/use-editor-state";
 import { getDefaultVizInput } from "@/lib/pyodide/viz-extractor";
 
 interface WorkspaceContextValue {
+  module: LearningModule;
   code: string;
   setCode: (code: string) => void;
   resetCode: () => void;
@@ -57,6 +58,7 @@ export function WorkspaceProvider({ module, children }: WorkspaceProviderProps) 
   return (
     <WorkspaceContext.Provider
       value={{
+        module,
         code,
         setCode,
         resetCode: reset,

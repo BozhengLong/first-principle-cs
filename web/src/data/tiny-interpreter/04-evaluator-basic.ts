@@ -6,6 +6,13 @@ export const module04EvaluatorBasic: LearningModule = {
   slug: "evaluator-basic",
   hasCode: true,
   vizType: "evaluator",
+  diagnostics: [
+    { pattern: "_allFail", message: { zh: "从 `eval()` 的分支开始——Number 和 Boolean 直接返回 `.value`", en: "Start with `eval()` branches — Number and Boolean just return `.value`" } },
+    { pattern: "test_if*", message: { zh: "`if` 是特殊形式——只求值一个分支，不是两个都求值", en: "`if` is a special form — only evaluate one branch, not both" } },
+    { pattern: "test_quote*", message: { zh: "`quote` 不求值参数——直接把 AST 转成值返回", en: "`quote` doesn't evaluate its argument — return the AST as a value directly" } },
+    { pattern: "test_define*", message: { zh: "`eval_define()` 需要先求值右边的表达式，再存到环境里", en: "`eval_define()` needs to evaluate the right-hand expression first, then store it in the environment" } },
+    { pattern: ["test_arithmetic", "test_nested_arithmetic"], message: { zh: "函数调用：先求值所有参数，再调用函数", en: "Function calls: evaluate all arguments first, then call the function" } },
+  ],
   skeleton: `"""基础求值器骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

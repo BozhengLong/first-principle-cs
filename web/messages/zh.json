@@ -72,7 +72,9 @@
     "resetCode": "重置代码",
     "hints": "提示",
     "hintLevel": "提示 {level}",
-    "unlockPrevious": "先查看上一级提示"
+    "unlockPrevious": "先查看上一级提示",
+    "diagnosticHint": "💡 思考",
+    "allTestsFailing": "别担心，这很正常！从第一个 TODO 开始"
   },
   "viz": {
     "tabGuide": "指南",

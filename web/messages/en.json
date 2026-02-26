@@ -72,7 +72,9 @@
     "resetCode": "Reset Code",
     "hints": "Hints",
     "hintLevel": "Hint {level}",
-    "unlockPrevious": "View previous hint first"
+    "unlockPrevious": "View previous hint first",
+    "diagnosticHint": "💡 Think",
+    "allTestsFailing": "Don't worry, this is normal! Start with the first TODO"
   },
   "viz": {
     "tabGuide": "Guide",
