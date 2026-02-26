@@ -8,6 +8,7 @@ import { VizPanel } from "./viz-panel";
 import { AiPanel } from "./ai-panel";
 import { cn } from "@/lib/utils";
 import type { LearningModule } from "@/data/types";
+import { WorkspaceProvider } from "@/contexts/workspace-context";
 
 type MobileTab = "code" | "viz" | "ai";
 
@@ -27,52 +28,54 @@ export function WorkspaceLayout({ project, module }: WorkspaceLayoutProps) {
   ];
 
   return (
-    <div className="flex h-full flex-col">
-      {/* Desktop: side-by-side panels + bottom AI */}
-      <div className="hidden flex-1 flex-col md:flex">
-        <div className="flex flex-1 min-h-0">
-          <div className="flex-1 min-w-0">
-            <CodePanel project={project} module={module} />
-          </div>
-          <div className="flex-1 min-w-0 border-l">
-            <VizPanel project={project} module={module} />
-          </div>
-        </div>
-        <AiPanel />
-      </div>
-
-      {/* Mobile: tab switcher */}
-      <div className="flex flex-1 flex-col md:hidden">
-        <div className="flex border-b">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={cn(
-                "flex flex-1 items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors",
-                activeTab === tab.key
-                  ? "border-b-2 border-primary text-primary"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {tab.icon}
-              {tab.label}
-            </button>
-          ))}
-        </div>
-        <div className="flex-1 min-h-0">
-          {activeTab === "code" && <CodePanel project={project} module={module} />}
-          {activeTab === "viz" && <VizPanel project={project} module={module} />}
-          {activeTab === "ai" && (
-            <div className="flex h-full flex-col items-center justify-center rounded-lg border border-dashed bg-muted/30 p-6">
-              <Bot className="mb-3 h-10 w-10 text-muted-foreground/50" />
-              <p className="text-sm text-muted-foreground">
-                {t("aiPlaceholder")}
-              </p>
+    <WorkspaceProvider module={module}>
+      <div className="flex h-full flex-col">
+        {/* Desktop: side-by-side panels + bottom AI */}
+        <div className="hidden flex-1 flex-col md:flex">
+          <div className="flex flex-1 min-h-0">
+            <div className="flex-1 min-w-0">
+              <CodePanel project={project} module={module} />
             </div>
-          )}
+            <div className="flex-1 min-w-0 border-l">
+              <VizPanel project={project} module={module} />
+            </div>
+          </div>
+          <AiPanel />
+        </div>
+
+        {/* Mobile: tab switcher */}
+        <div className="flex flex-1 flex-col md:hidden">
+          <div className="flex border-b">
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={cn(
+                  "flex flex-1 items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors",
+                  activeTab === tab.key
+                    ? "border-b-2 border-primary text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex-1 min-h-0">
+            {activeTab === "code" && <CodePanel project={project} module={module} />}
+            {activeTab === "viz" && <VizPanel project={project} module={module} />}
+            {activeTab === "ai" && (
+              <div className="flex h-full flex-col items-center justify-center rounded-lg border border-dashed bg-muted/30 p-6">
+                <Bot className="mb-3 h-10 w-10 text-muted-foreground/50" />
+                <p className="text-sm text-muted-foreground">
+                  {t("aiPlaceholder")}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </WorkspaceProvider>
   );
 }

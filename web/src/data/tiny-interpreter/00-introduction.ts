@@ -5,6 +5,7 @@ export const module00Introduction: LearningModule = {
   index: 0,
   slug: "introduction",
   hasCode: false,
+  vizType: "none",
   readme: {
     zh: `# 模块 0：为什么要学解释器？
 

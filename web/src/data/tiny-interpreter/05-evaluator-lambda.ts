@@ -5,6 +5,7 @@ export const module05EvaluatorLambda: LearningModule = {
   index: 5,
   slug: "evaluator-lambda",
   hasCode: true,
+  vizType: "closure",
   skeleton: `"""Lambda 与闭包骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

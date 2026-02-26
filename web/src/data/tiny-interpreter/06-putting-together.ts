@@ -5,6 +5,7 @@ export const module06PuttingTogether: LearningModule = {
   index: 6,
   slug: "putting-together",
   hasCode: false,
+  vizType: "none",
   readme: {
     zh: `# 模块 6：整合与扩展
 

@@ -5,6 +5,7 @@ export const module02Parser: LearningModule = {
   index: 2,
   slug: "parser",
   hasCode: true,
+  vizType: "ast",
   skeleton: `"""语法分析器骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

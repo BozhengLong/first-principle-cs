@@ -1,3 +1,5 @@
+import type { VizType } from "@/types/viz";
+
 export interface LearningModule {
   id: string;
   index: number;
@@ -7,4 +9,5 @@ export interface LearningModule {
   testCode?: string;
   readme: { zh: string; en: string };
   hints?: { level: number; content: { zh: string; en: string } }[];
+  vizType?: VizType;
 }

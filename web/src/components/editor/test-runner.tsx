@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { usePyodide } from "@/hooks/use-pyodide";
+import { useWorkspace } from "@/contexts/workspace-context";
 import { cn } from "@/lib/utils";
 
 interface TestRunnerProps {
@@ -16,17 +17,24 @@ interface TestRunnerProps {
 export function TestRunner({ code, testCode, onReset }: TestRunnerProps) {
   const t = useTranslations("learn");
   const { status, running, results, rawOutput, runTests } = usePyodide();
+  const { runVisualize } = useWorkspace();
 
   const isReady = status === "ready";
   const passed = results.filter((r) => r.passed).length;
   const total = results.length;
+
+  const handleRunTests = async () => {
+    await runTests(code, testCode);
+    // Auto-visualize after test run
+    runVisualize();
+  };
 
   return (
     <div className="flex flex-col border-t">
       <div className="flex items-center gap-2 px-3 py-2">
         <Button
           size="sm"
-          onClick={() => runTests(code, testCode)}
+          onClick={handleRunTests}
           disabled={!isReady || running}
           className="gap-1.5"
         >

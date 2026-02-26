@@ -74,6 +74,15 @@
     "hintLevel": "提示 {level}",
     "unlockPrevious": "先查看上一级提示"
   },
+  "viz": {
+    "tabGuide": "指南",
+    "tabVisualization": "可视化",
+    "tabHints": "提示",
+    "inputPlaceholder": "输入表达式，如 (+ 1 2)",
+    "visualize": "可视化",
+    "error": "错误",
+    "noData": "点击「可视化」或运行测试来查看结果"
+  },
   "modules": {
     "tiny-interpreter": {
       "module0": "引言",

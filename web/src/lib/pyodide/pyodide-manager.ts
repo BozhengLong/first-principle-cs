@@ -3,6 +3,7 @@ import {
   refLexer,
   refParser,
   refEnvironment,
+  refEvaluator,
   refSrcInit,
 } from "@/data/tiny-interpreter/reference-implementations";
 
@@ -82,6 +83,11 @@ function setupReferenceImplementations(py: PyodideInterface) {
   py.FS.writeFile("/home/pyodide/src/tiny_interpreter/lexer.py", refLexer);
   py.FS.writeFile("/home/pyodide/src/tiny_interpreter/parser.py", refParser);
   py.FS.writeFile("/home/pyodide/src/tiny_interpreter/environment.py", refEnvironment);
+  py.FS.writeFile("/home/pyodide/src/tiny_interpreter/evaluator.py", refEvaluator);
+}
+
+export function getPyodide(): PyodideInterface | null {
+  return pyodideInstance;
 }
 
 export async function runTests(

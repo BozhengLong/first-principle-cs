@@ -5,6 +5,7 @@ export const module03Environment: LearningModule = {
   index: 3,
   slug: "environment",
   hasCode: true,
+  vizType: "environment",
   skeleton: `"""环境模型骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

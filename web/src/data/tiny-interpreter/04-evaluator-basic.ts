@@ -5,6 +5,7 @@ export const module04EvaluatorBasic: LearningModule = {
   index: 4,
   slug: "evaluator-basic",
   hasCode: true,
+  vizType: "evaluator",
   skeleton: `"""基础求值器骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

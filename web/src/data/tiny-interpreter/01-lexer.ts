@@ -5,6 +5,7 @@ export const module01Lexer: LearningModule = {
   index: 1,
   slug: "lexer",
   hasCode: true,
+  vizType: "tokens",
   skeleton: `"""词法分析器骨架代码。
 
 你的任务是实现标记为 TODO 的方法。

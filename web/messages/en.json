@@ -74,6 +74,15 @@
     "hintLevel": "Hint {level}",
     "unlockPrevious": "View previous hint first"
   },
+  "viz": {
+    "tabGuide": "Guide",
+    "tabVisualization": "Visualization",
+    "tabHints": "Hints",
+    "inputPlaceholder": "Enter expression, e.g. (+ 1 2)",
+    "visualize": "Visualize",
+    "error": "Error",
+    "noData": "Click \"Visualize\" or run tests to see results"
+  },
   "modules": {
     "tiny-interpreter": {
       "module0": "Introduction",

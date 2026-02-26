@@ -349,4 +349,165 @@ class Environment:
         return f"Environment({list(self.bindings.keys())})"
 `;
 
+export const refEvaluator = `"""Evaluator for Tiny Interpreter.
+
+The evaluator executes AST nodes in an environment.
+"""
+
+from typing import Any, List, Callable
+from .parser import ASTNode, Number, Boolean, Symbol, SExpression, parse
+from .environment import Environment
+
+
+class EvaluatorError(Exception):
+    """Exception raised for evaluation errors."""
+    pass
+
+
+class Closure:
+    """A closure captures a function and its defining environment."""
+
+    def __init__(self, params: List[str], body: List[ASTNode], env: Environment):
+        self.params = params
+        self.body = body
+        self.env = env
+
+    def __repr__(self):
+        return f"<closure {self.params}>"
+
+
+class Evaluator:
+    """Evaluator for executing AST nodes."""
+
+    def __init__(self):
+        self.global_env = self.create_global_environment()
+
+    def create_global_environment(self) -> Environment:
+        env = Environment()
+        env.define('+', lambda *args: sum(args))
+        env.define('-', lambda a, b: a - b)
+        env.define('*', lambda a, b: a * b)
+        env.define('/', lambda a, b: a // b)
+        env.define('=', lambda a, b: a == b)
+        env.define('<', lambda a, b: a < b)
+        env.define('>', lambda a, b: a > b)
+        env.define('<=', lambda a, b: a <= b)
+        env.define('>=', lambda a, b: a >= b)
+        env.define('cons', lambda a, b: [a] + (b if isinstance(b, list) else [b]))
+        env.define('car', lambda lst: lst[0] if lst else None)
+        env.define('cdr', lambda lst: lst[1:] if len(lst) > 1 else [])
+        env.define('list', lambda *args: list(args))
+        env.define('null?', lambda lst: len(lst) == 0 if isinstance(lst, list) else False)
+        env.define('number?', lambda x: isinstance(x, int))
+        env.define('boolean?', lambda x: isinstance(x, bool))
+        env.define('list?', lambda x: isinstance(x, list))
+        return env
+
+    def eval(self, node: ASTNode, env: Environment) -> Any:
+        if isinstance(node, Number):
+            return node.value
+        if isinstance(node, Boolean):
+            return node.value
+        if isinstance(node, Symbol):
+            return env.get(node.name)
+        if isinstance(node, SExpression):
+            if len(node.elements) == 0:
+                return []
+            first = node.elements[0]
+            if isinstance(first, Symbol):
+                if first.name == 'define':
+                    return self.eval_define(node.elements[1:], env)
+                if first.name == 'lambda':
+                    return self.eval_lambda(node.elements[1:], env)
+                if first.name == 'if':
+                    return self.eval_if(node.elements[1:], env)
+                if first.name == 'quote':
+                    return self.eval_quote(node.elements[1:])
+                if first.name == 'begin':
+                    return self.eval_begin(node.elements[1:], env)
+            return self.eval_application(node.elements, env)
+        raise EvaluatorError(f"Unknown node type: {type(node)}")
+
+    def eval_define(self, args, env):
+        if len(args) != 2:
+            raise EvaluatorError(f"define expects 2 arguments, got {len(args)}")
+        name_node = args[0]
+        if not isinstance(name_node, Symbol):
+            raise EvaluatorError("define expects a symbol as first argument")
+        value = self.eval(args[1], env)
+        env.define(name_node.name, value)
+        return None
+
+    def eval_lambda(self, args, env):
+        if len(args) < 2:
+            raise EvaluatorError("lambda expects at least 2 arguments")
+        params_node = args[0]
+        if not isinstance(params_node, SExpression):
+            raise EvaluatorError("lambda expects a list of parameters")
+        params = []
+        for param in params_node.elements:
+            if not isinstance(param, Symbol):
+                raise EvaluatorError("lambda parameters must be symbols")
+            params.append(param.name)
+        body = args[1:]
+        return Closure(params, body, env)
+
+    def eval_if(self, args, env):
+        if len(args) != 3:
+            raise EvaluatorError(f"if expects 3 arguments, got {len(args)}")
+        condition = self.eval(args[0], env)
+        if condition:
+            return self.eval(args[1], env)
+        else:
+            return self.eval(args[2], env)
+
+    def eval_quote(self, args):
+        if len(args) != 1:
+            raise EvaluatorError(f"quote expects 1 argument, got {len(args)}")
+        return self.ast_to_value(args[0])
+
+    def eval_begin(self, args, env):
+        result = None
+        for expr in args:
+            result = self.eval(expr, env)
+        return result
+
+    def eval_application(self, elements, env):
+        func = self.eval(elements[0], env)
+        args = [self.eval(arg, env) for arg in elements[1:]]
+        if callable(func) and not isinstance(func, Closure):
+            return func(*args)
+        if isinstance(func, Closure):
+            if len(args) != len(func.params):
+                raise EvaluatorError(
+                    f"Function expects {len(func.params)} arguments, got {len(args)}"
+                )
+            func_env = Environment(func.env)
+            for param, arg in zip(func.params, args):
+                func_env.define(param, arg)
+            result = None
+            for expr in func.body:
+                result = self.eval(expr, func_env)
+            return result
+        raise EvaluatorError(f"Not a function: {func}")
+
+    def ast_to_value(self, node):
+        if isinstance(node, Number):
+            return node.value
+        if isinstance(node, Boolean):
+            return node.value
+        if isinstance(node, Symbol):
+            return node.name
+        if isinstance(node, SExpression):
+            return [self.ast_to_value(elem) for elem in node.elements]
+        return node
+
+    def run(self, source: str) -> Any:
+        ast_nodes = parse(source)
+        result = None
+        for node in ast_nodes:
+            result = self.eval(node, self.global_env)
+        return result
+`;
+
 export const refSrcInit = ``;

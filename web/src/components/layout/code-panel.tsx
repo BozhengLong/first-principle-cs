@@ -7,7 +7,7 @@ import { CodeEditor } from "@/components/editor/code-editor";
 import { StepHeader } from "@/components/editor/step-header";
 import { TestRunner } from "@/components/editor/test-runner";
 import { MarkdownContent } from "@/components/learn/markdown-content";
-import { useEditorState } from "@/hooks/use-editor-state";
+import { useWorkspace } from "@/contexts/workspace-context";
 
 interface CodePanelProps {
   project: string;
@@ -18,7 +18,7 @@ export function CodePanel({ project, module }: CodePanelProps) {
   const locale = useLocale() as "zh" | "en";
   const { prev, next } = getAdjacentModules(project, module.slug);
   const totalModules = getModules(project).length;
-  const { code, setCode, reset } = useEditorState(module.id, module.skeleton);
+  const { code, setCode, resetCode } = useWorkspace();
 
   // For modules without code, show README in full panel
   if (!module.hasCode) {
@@ -51,7 +51,7 @@ export function CodePanel({ project, module }: CodePanelProps) {
         <CodeEditor value={code} onChange={setCode} />
       </div>
       {module.testCode && (
-        <TestRunner code={code} testCode={module.testCode} onReset={reset} />
+        <TestRunner code={code} testCode={module.testCode} onReset={resetCode} />
       )}
     </div>
   );
