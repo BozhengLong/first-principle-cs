@@ -1121,4 +1121,42 @@ If you're still stuck, you can refer to the complete implementation in \`src/tin
 
 But we recommend trying on your own first and understanding how recursive descent works!` } },
   ],
+  guidance: [
+    {
+      question: {
+        zh: "先从最简单的开始：`current_token()` 应该返回什么？",
+        en: "Let's start simple: what should `current_token()` return?"
+      }
+    },
+    {
+      question: {
+        zh: "`advance()` 做什么？它需要检查什么边界条件？",
+        en: "What does `advance()` do? What boundary condition does it need to check?"
+      }
+    },
+    {
+      question: {
+        zh: "`parse_expr()` 遇到 `(` 时应该做什么？",
+        en: "What should `parse_expr()` do when it encounters `(`?"
+      }
+    },
+    {
+      question: {
+        zh: "`parse_sexp()` 的循环什么时候结束？",
+        en: "When should the loop in `parse_sexp()` terminate?"
+      }
+    },
+    {
+      question: {
+        zh: "如果在 `parse_sexp()` 循环中遇到 EOF 会怎样？应该怎么处理？",
+        en: "What happens if we hit EOF inside `parse_sexp()` loop? How should we handle it?"
+      }
+    },
+    {
+      question: {
+        zh: "递归在哪里发生？为什么需要递归？",
+        en: "Where does recursion happen? Why do we need recursion?"
+      }
+    }
+  ],
 };

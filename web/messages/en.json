@@ -74,7 +74,13 @@
     "hintLevel": "Hint {level}",
     "unlockPrevious": "View previous hint first",
     "diagnosticHint": "💡 Think",
-    "allTestsFailing": "Don't worry, this is normal! Start with the first TODO"
+    "allTestsFailing": "Don't worry, this is normal! Start with the first TODO",
+    "guidance": {
+      "header": "💡 Let's Think Together",
+      "continueThinking": "Continue Thinking",
+      "viewHint": "View Hint {level}",
+      "allQuestionsRevealed": "You've thought through all questions. Ready to view hints?"
+    }
   },
   "viz": {
     "tabGuide": "Guide",

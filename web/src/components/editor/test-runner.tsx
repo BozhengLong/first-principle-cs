@@ -8,6 +8,7 @@ import { usePyodide } from "@/hooks/use-pyodide";
 import { useWorkspace } from "@/contexts/workspace-context";
 import { cn } from "@/lib/utils";
 import { matchDiagnostics } from "@/lib/diagnostics/match-diagnostics";
+import { GuidancePanel } from "@/components/learn/guidance-panel";
 
 interface TestRunnerProps {
   code: string;
@@ -127,6 +128,15 @@ export function TestRunner({ code, testCode, onReset }: TestRunnerProps) {
             {rawOutput}
           </pre>
         </ScrollArea>
+      )}
+
+      {/* Guidance Panel */}
+      {results.length > 0 && module.guidance && (
+        <GuidancePanel
+          guidance={module.guidance}
+          hints={module.hints}
+          hasFailures={results.some((r) => !r.passed)}
+        />
       )}
     </div>
   );

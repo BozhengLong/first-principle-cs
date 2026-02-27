@@ -1204,4 +1204,42 @@ If you're still stuck, you can refer to the complete implementation in \`src/tin
 
 But we recommend trying on your own first and understanding the reason behind each step!` } },
   ],
+  guidance: [
+    {
+      question: {
+        zh: "先从最简单的开始：`current_char()` 方法应该返回什么？",
+        en: "Let's start simple: what should `current_char()` return?"
+      }
+    },
+    {
+      question: {
+        zh: "如果 `self.pos` 超出了字符串长度会怎样？应该返回什么？",
+        en: "What happens if `self.pos` exceeds the string length? What should it return?"
+      }
+    },
+    {
+      question: {
+        zh: "现在看 `advance()`：除了移动位置，还需要更新什么？",
+        en: "Now look at `advance()`: besides moving position, what else needs updating?"
+      }
+    },
+    {
+      question: {
+        zh: "遇到换行符 `\\n` 时，行号和列号应该如何变化？",
+        en: "When encountering a newline `\\n`, how should line and column numbers change?"
+      }
+    },
+    {
+      question: {
+        zh: "准备好实现 `skip_whitespace()` 了吗？它的循环条件是什么？",
+        en: "Ready to implement `skip_whitespace()`? What's the loop condition?"
+      }
+    },
+    {
+      question: {
+        zh: "负数 `-42` 和减号 `(- 4 2)` 怎么区分？关键在哪里？",
+        en: "How to distinguish negative number `-42` from minus `(- 4 2)`? What's the key?"
+      }
+    }
+  ],
 };

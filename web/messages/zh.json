@@ -74,7 +74,13 @@
     "hintLevel": "提示 {level}",
     "unlockPrevious": "先查看上一级提示",
     "diagnosticHint": "💡 思考",
-    "allTestsFailing": "别担心，这很正常！从第一个 TODO 开始"
+    "allTestsFailing": "别担心，这很正常！从第一个 TODO 开始",
+    "guidance": {
+      "header": "💡 让我们一起思考",
+      "continueThinking": "继续思考",
+      "viewHint": "查看提示 {level}",
+      "allQuestionsRevealed": "已经思考了所有问题，准备好查看提示了吗？"
+    }
   },
   "viz": {
     "tabGuide": "指南",

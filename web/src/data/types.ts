@@ -5,6 +5,10 @@ export interface DiagnosticRule {
   message: { zh: string; en: string };
 }
 
+export interface GuidanceQuestion {
+  question: { zh: string; en: string };
+}
+
 export interface LearningModule {
   id: string;
   index: number;
@@ -15,5 +19,6 @@ export interface LearningModule {
   readme: { zh: string; en: string };
   hints?: { level: number; content: { zh: string; en: string } }[];
   diagnostics?: DiagnosticRule[];
+  guidance?: GuidanceQuestion[];
   vizType?: VizType;
 }
