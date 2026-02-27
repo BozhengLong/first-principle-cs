@@ -1078,4 +1078,42 @@ If you use \`Environment(env)\`, the closure tests will fail!
 
 Try changing \`func.env\` to \`env\` and see what happens with \`test_closure_lexical_scope\` — this is the best way to understand lexical scoping.` } },
   ],
+  guidance: [
+    {
+      question: {
+        zh: "Closure 类的三个属性分别存储什么？哪个最关键？",
+        en: "What do the three attributes of Closure store? Which is most critical?"
+      }
+    },
+    {
+      question: {
+        zh: "`eval_lambda()` 需要从 AST 中提取什么信息？",
+        en: "What information does `eval_lambda()` need to extract from the AST?"
+      }
+    },
+    {
+      question: {
+        zh: "闭包'捕获环境'是什么意思？在代码中如何体现？",
+        en: "What does it mean for a closure to 'capture the environment'? How is this shown in code?"
+      }
+    },
+    {
+      question: {
+        zh: "调用闭包时，新环境的 parent 应该是什么？为什么？",
+        en: "When calling a closure, what should the new environment's parent be? Why?"
+      }
+    },
+    {
+      question: {
+        zh: "如果新环境的 parent 是调用时的环境而不是定义时的环境，会发生什么？",
+        en: "What would happen if the new environment's parent was the call-time environment instead of definition-time?"
+      }
+    },
+    {
+      question: {
+        zh: "递归函数如何找到自己？`factorial` 调用自己时发生了什么？",
+        en: "How does a recursive function find itself? What happens when `factorial` calls itself?"
+      }
+    }
+  ],
 };

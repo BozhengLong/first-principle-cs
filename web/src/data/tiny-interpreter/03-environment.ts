@@ -986,4 +986,42 @@ If \`set\` created a new variable in the current environment, it would shadow th
 
 If you're still stuck, you can refer to the complete implementation in \`src/tiny_interpreter/environment.py\`.` } },
   ],
+  guidance: [
+    {
+      question: {
+        zh: "最简单的 `define()` 应该做什么？它需要几行代码？",
+        en: "What's the simplest thing `define()` should do? How many lines of code?"
+      }
+    },
+    {
+      question: {
+        zh: "`get()` 在当前环境找不到变量时应该怎么办？",
+        en: "What should `get()` do when it can't find a variable in the current environment?"
+      }
+    },
+    {
+      question: {
+        zh: "环境链是如何实现词法作用域的？`parent` 引用指向哪里？",
+        en: "How does the environment chain implement lexical scoping? Where does the `parent` reference point?"
+      }
+    },
+    {
+      question: {
+        zh: "`set()` 和 `define()` 的关键区别是什么？",
+        en: "What's the key difference between `set()` and `define()`?"
+      }
+    },
+    {
+      question: {
+        zh: "如果变量在父环境中，`set()` 应该修改哪个环境？",
+        en: "If a variable is in the parent environment, which environment should `set()` modify?"
+      }
+    },
+    {
+      question: {
+        zh: "为什么 `set()` 不能创建新变量？这个设计有什么好处？",
+        en: "Why can't `set()` create new variables? What's the benefit of this design?"
+      }
+    }
+  ],
 };

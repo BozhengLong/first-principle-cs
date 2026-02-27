@@ -1120,4 +1120,42 @@ def eval_begin(self, args, env):
 
 If you're still stuck, you can refer to the complete implementation in \`src/tiny_interpreter/evaluator.py\`.` } },
   ],
+  guidance: [
+    {
+      question: {
+        zh: "`eval()` 的基本结构是什么？需要处理几种节点类型？",
+        en: "What's the basic structure of `eval()`? How many node types need handling?"
+      }
+    },
+    {
+      question: {
+        zh: "Number 和 Boolean 为什么叫'自求值'？它们的求值规则是什么？",
+        en: "Why are Number and Boolean called 'self-evaluating'? What's their evaluation rule?"
+      }
+    },
+    {
+      question: {
+        zh: "Symbol 的求值需要什么？在哪里查找它的值？",
+        en: "What does Symbol evaluation need? Where do we look up its value?"
+      }
+    },
+    {
+      question: {
+        zh: "为什么 `if` 必须是特殊形式而不能是普通函数？",
+        en: "Why must `if` be a special form rather than a regular function?"
+      }
+    },
+    {
+      question: {
+        zh: "`eval_application()` 的三个步骤是什么？顺序重要吗？",
+        en: "What are the three steps in `eval_application()`? Does order matter?"
+      }
+    },
+    {
+      question: {
+        zh: "`quote` 做什么？它为什么不求值参数？",
+        en: "What does `quote` do? Why doesn't it evaluate its argument?"
+      }
+    }
+  ],
 };
