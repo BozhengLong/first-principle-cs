@@ -22,6 +22,12 @@ interface WorkspaceContextValue {
   vizInput: string;
   setVizInput: (input: string) => void;
   runVisualize: () => Promise<void>;
+  currentStep: number;
+  setCurrentStep: (step: number) => void;
+  isPlaying: boolean;
+  setIsPlaying: (playing: boolean) => void;
+  playbackSpeed: number;
+  setPlaybackSpeed: (speed: number) => void;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextValue | null>(null);
@@ -42,10 +48,15 @@ export function WorkspaceProvider({ module, children }: WorkspaceProviderProps) 
   const [vizData, setVizData] = useState<VizData | null>(null);
   const [vizLoading, setVizLoading] = useState(false);
   const [vizInput, setVizInput] = useState(() => getDefaultVizInput(module.slug));
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1000);
 
   const runVisualize = useCallback(async () => {
     if (!module.vizType || module.vizType === "none") return;
     setVizLoading(true);
+    setCurrentStep(0);
+    setIsPlaying(false);
     try {
       const { extractVizData } = await import("@/lib/pyodide/viz-extractor");
       const data = await extractVizData(module.slug, vizInput);
@@ -67,6 +78,12 @@ export function WorkspaceProvider({ module, children }: WorkspaceProviderProps) 
         vizInput,
         setVizInput,
         runVisualize,
+        currentStep,
+        setCurrentStep,
+        isPlaying,
+        setIsPlaying,
+        playbackSpeed,
+        setPlaybackSpeed,
       }}
     >
       {children}

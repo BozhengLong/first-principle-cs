@@ -1,11 +1,15 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import type { VizData } from "@/types/viz";
 import type { VizType } from "@/types/viz";
 import { TokenStream } from "./token-stream";
 import { ASTTree } from "./ast-tree";
 import { EnvChain } from "./env-chain";
+import { ClosureViz } from "./closure-viz";
+import { StepControls } from "./step-controls";
+import { useWorkspace } from "@/contexts/workspace-context";
 
 interface VizRendererProps {
   vizType: VizType;
@@ -14,6 +18,42 @@ interface VizRendererProps {
 
 export function VizRenderer({ vizType, data }: VizRendererProps) {
   const t = useTranslations("viz");
+  const { currentStep } = useWorkspace();
+
+  // Compute current step data
+  const stepData = useMemo(() => {
+    if (!data.trace || data.trace.length === 0) {
+      return {
+        hasTrace: false,
+        currentNodeId: undefined,
+        executedNodeIds: new Set<string>(),
+        currentMessage: undefined,
+        currentEnv: data.environments,
+        highlightedBinding: undefined,
+        lookupPath: undefined,
+        newFrameId: undefined,
+      };
+    }
+
+    const trace = data.trace;
+    const step = trace[Math.min(currentStep, trace.length - 1)];
+    const executedNodeIds = new Set(
+      trace.slice(0, currentStep + 1)
+        .map((s) => s.nodeId)
+        .filter((id): id is string => id !== undefined)
+    );
+
+    return {
+      hasTrace: true,
+      currentNodeId: step.nodeId,
+      executedNodeIds,
+      currentMessage: step.message,
+      currentEnv: step.env ? [step.env] : data.environments,
+      highlightedBinding: undefined, // TODO: extract from step
+      lookupPath: undefined, // TODO: extract from step
+      newFrameId: step.type === "call" ? step.env?.id : undefined,
+    };
+  }, [data, currentStep]);
 
   if (data.error) {
     return (
@@ -30,6 +70,14 @@ export function VizRenderer({ vizType, data }: VizRendererProps) {
 
   return (
     <div className="space-y-6">
+      {/* Step controls - only show if we have trace data */}
+      {stepData.hasTrace && data.trace && (
+        <StepControls
+          totalSteps={data.trace.length}
+          currentMessage={stepData.currentMessage}
+        />
+      )}
+
       {data.tokens && (
         <section>
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -44,7 +92,11 @@ export function VizRenderer({ vizType, data }: VizRendererProps) {
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             AST
           </h3>
-          <ASTTree ast={data.ast} />
+          <ASTTree
+            ast={data.ast}
+            currentNodeId={stepData.currentNodeId}
+            executedNodeIds={stepData.executedNodeIds}
+          />
         </section>
       )}
 
@@ -53,7 +105,22 @@ export function VizRenderer({ vizType, data }: VizRendererProps) {
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Environment
           </h3>
-          <EnvChain environments={data.environments} evalResult={data.evalResult} />
+          <EnvChain
+            environments={stepData.currentEnv ?? data.environments}
+            evalResult={data.evalResult}
+            highlightedBinding={stepData.highlightedBinding}
+            lookupPath={stepData.lookupPath}
+            newFrameId={stepData.newFrameId}
+          />
+        </section>
+      )}
+
+      {vizType === "closure" && data.closures && (
+        <section>
+          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Closures
+          </h3>
+          <ClosureViz closures={data.closures} />
         </section>
       )}
     </div>

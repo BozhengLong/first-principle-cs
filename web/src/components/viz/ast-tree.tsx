@@ -57,9 +57,12 @@ function nodeLabel(n: VizASTNode): string {
 
 interface ASTTreeProps {
   ast: VizASTNode[];
+  currentNodeId?: string;
+  executedNodeIds?: Set<string>;
+  onNodeClick?: (node: VizASTNode) => void;
 }
 
-export function ASTTree({ ast }: ASTTreeProps) {
+export function ASTTree({ ast, currentNodeId, executedNodeIds, onNodeClick }: ASTTreeProps) {
   const { allNodes, viewBox } = useMemo(() => {
     // Wrap multiple top-level nodes in a virtual root
     const root: VizASTNode = ast.length === 1
@@ -73,6 +76,16 @@ export function ASTTree({ ast }: ASTTreeProps) {
     const maxY = Math.max(...all.map((n) => n.y)) + NODE_H + 8;
     return { allNodes: all, viewBox: `0 0 ${maxX} ${maxY}` };
   }, [ast]);
+
+  const getNodeOpacity = (nodeId?: string) => {
+    if (!executedNodeIds || executedNodeIds.size === 0) return 1;
+    if (!nodeId) return 0.4;
+    return executedNodeIds.has(nodeId) ? 1 : 0.4;
+  };
+
+  const isCurrentNode = (nodeId?: string) => {
+    return currentNodeId && nodeId === currentNodeId;
+  };
 
   return (
     <svg viewBox={viewBox} className="w-full" style={{ maxHeight: 400 }}>
@@ -94,8 +107,17 @@ export function ASTTree({ ast }: ASTTreeProps) {
       {allNodes.map((ln, i) => {
         const fill = TYPE_COLORS[ln.node.type] ?? "#64748b";
         const label = nodeLabel(ln.node);
+        const isCurrent = isCurrentNode(ln.node.id);
+        const opacity = getNodeOpacity(ln.node.id);
+        const strokeWidth = isCurrent ? 3 : 1.5;
+
         return (
-          <g key={i}>
+          <g
+            key={i}
+            style={{ cursor: onNodeClick ? "pointer" : "default" }}
+            onClick={() => onNodeClick?.(ln.node)}
+            className="transition-all duration-200 hover:scale-105"
+          >
             <rect
               x={ln.x - NODE_W / 2}
               y={ln.y}
@@ -103,9 +125,10 @@ export function ASTTree({ ast }: ASTTreeProps) {
               height={NODE_H}
               rx={8}
               fill={fill}
-              opacity={0.15}
+              opacity={opacity * 0.15}
               stroke={fill}
-              strokeWidth={1.5}
+              strokeWidth={strokeWidth}
+              filter={isCurrent ? "url(#glow)" : undefined}
             />
             <text
               x={ln.x}
@@ -114,12 +137,23 @@ export function ASTTree({ ast }: ASTTreeProps) {
               dominantBaseline="central"
               className="text-xs font-mono"
               fill={fill}
+              opacity={opacity}
             >
               {label}
             </text>
           </g>
         );
       })}
+      {/* Glow filter for current node */}
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+          <feMerge>
+            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
     </svg>
   );
 }
