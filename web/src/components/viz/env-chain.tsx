@@ -142,9 +142,9 @@ function EnvFrameCard({
                     highlightedBinding === k
                       ? {
                           backgroundColor: [
-                            "transparent",
+                            "rgba(34, 197, 94, 0)",
                             "rgba(34, 197, 94, 0.2)",
-                            "transparent",
+                            "rgba(34, 197, 94, 0)",
                           ],
                         }
                       : {}

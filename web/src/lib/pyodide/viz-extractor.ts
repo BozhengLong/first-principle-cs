@@ -72,8 +72,10 @@ class TracingEvaluator:
     def __init__(self, evaluator):
         self.evaluator = evaluator
         self.trace = []
+        self.closures = []
         self.step_id = 0
         self.env_counter = [0]
+        self.closure_counter = [0]
 
     def add_step(self, step_type, node=None, env=None, result=None, message=None):
         step = {
@@ -106,8 +108,35 @@ class TracingEvaluator:
 
         # Variable lookup
         if isinstance(node, Symbol):
+            # Trace the lookup path through env chain (use same ID scheme as extract_env_chain)
+            lookup_frame_ids = []
+            current_env = env
+            env_chain_counter = [0]
+            while current_env is not None:
+                fid = f"env_{env_chain_counter[0]}"
+                env_chain_counter[0] += 1
+                lookup_frame_ids.append(fid)
+                if node.name in current_env.bindings:
+                    break
+                current_env = current_env.parent
             result = env.get(node.name)
-            self.add_step("return", node=node, result=result, message=f"Lookup {node.name} = {repr(result)}")
+            # Include full env chain so lookup path animation works
+            full_env_chain = extract_env_chain(env, [0])
+            step = {
+                "stepId": self.step_id,
+                "type": "return",
+                "message": f"Lookup {node.name} = {repr(result)}",
+                "result": repr(result),
+                "lookupFrameIds": lookup_frame_ids,
+                "envChain": full_env_chain,
+            }
+            if hasattr(node, '_viz_id'):
+                step["nodeId"] = node._viz_id
+                step["node"] = ast_node_to_dict(node, assign_id=False)
+            if env is not None:
+                step["env"] = extract_env_chain(env, [0])[0]
+            self.trace.append(step)
+            self.step_id += 1
             return result
 
         # S-expression
@@ -127,8 +156,20 @@ class TracingEvaluator:
                         raise ValueError("define name must be a symbol")
                     val = self.eval_with_trace(node.elements[2], env)
                     env.define(name_node.name, val)
-                    self.add_step("define", node=node, env=env, result=val,
-                                message=f"Define {name_node.name} = {repr(val)}")
+                    step = {
+                        "stepId": self.step_id,
+                        "type": "define",
+                        "message": f"Define {name_node.name} = {repr(val)}",
+                        "result": repr(val),
+                        "definedName": name_node.name,
+                    }
+                    if hasattr(node, '_viz_id'):
+                        step["nodeId"] = node._viz_id
+                        step["node"] = ast_node_to_dict(node, assign_id=False)
+                    if env is not None:
+                        step["env"] = extract_env_chain(env, [0])[0]
+                    self.trace.append(step)
+                    self.step_id += 1
                     return val
 
                 if first.name == "lambda":
@@ -140,6 +181,16 @@ class TracingEvaluator:
                     params = [p.name for p in params_node.elements if isinstance(p, Symbol)]
                     body = node.elements[2:]
                     closure = Closure(params, body, env)
+                    # Capture closure data for visualization
+                    closure_id = f"closure_{self.closure_counter[0]}"
+                    self.closure_counter[0] += 1
+                    self.closures.append({
+                        "id": closure_id,
+                        "params": params,
+                        "body": [ast_node_to_dict(b, assign_id=False) for b in body],
+                        "capturedEnv": extract_env_chain(env, [0])[0],
+                        "createdAtStep": self.step_id,
+                    })
                     self.add_step("closure_create", node=node, env=env, result=closure,
                                 message=f"Create closure with params {params}")
                     return closure
@@ -162,9 +213,10 @@ class TracingEvaluator:
             self.add_step("call", node=node, message=f"Call {repr(func)} with {len(args)} args")
 
             if isinstance(func, Closure):
+                from src.tiny_interpreter.environment import Environment as Env
                 if len(args) != len(func.params):
                     raise ValueError(f"Expected {len(func.params)} args, got {len(args)}")
-                new_env = func.env.extend()
+                new_env = Env(parent=func.env)
                 for param, arg in zip(func.params, args):
                     new_env.define(param, arg)
                 result = None
@@ -210,6 +262,7 @@ def extract_viz(source, level):
             result["evalResult"] = repr(val)
             result["environments"] = extract_env_chain(evaluator.global_env, [0])
             result["trace"] = tracer.trace
+            result["closures"] = tracer.closures
     except Exception as e:
         result["error"] = str(e)
     return json.dumps(result)

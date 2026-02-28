@@ -29,9 +29,12 @@ export interface ExecutionStep {
   type: "eval" | "define" | "call" | "return" | "closure_create";
   node?: VizASTNode;
   env?: VizEnvFrame;
+  envChain?: VizEnvFrame[];
   result?: string;
   message?: string;
   nodeId?: string;
+  definedName?: string;
+  lookupFrameIds?: string[];
 }
 
 export interface VizClosure {

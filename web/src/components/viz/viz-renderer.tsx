@@ -48,9 +48,12 @@ export function VizRenderer({ vizType, data }: VizRendererProps) {
       currentNodeId: step.nodeId,
       executedNodeIds,
       currentMessage: step.message,
-      currentEnv: step.env ? [step.env] : data.environments,
-      highlightedBinding: undefined, // TODO: extract from step
-      lookupPath: undefined, // TODO: extract from step
+      currentEnv: step.envChain ?? (step.env ? [step.env] : data.environments),
+      highlightedBinding:
+        step.type === "define" && step.definedName && step.env
+          ? { frameId: step.env.id, key: step.definedName }
+          : undefined,
+      lookupPath: step.lookupFrameIds ?? undefined,
       newFrameId: step.type === "call" ? step.env?.id : undefined,
     };
   }, [data, currentStep]);
